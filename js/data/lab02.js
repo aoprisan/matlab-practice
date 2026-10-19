@@ -144,38 +144,60 @@ LABS.push({
     { type: 'mc', q: 'Ce dă ' + c('size([1 2 3;4 5 6])') + '?', options: [c('2 3'), c('3 2'), c('6'), c('2')], answer: 0, explain: '<code>size</code> returnează numărul de linii și numărul de coloane: 2 linii, 3 coloane.' },
   ],
   exercises: [
-    { title: 'Definirea vectorilor și matricilor', statement: `<p>Definește vectorii linie v, w, vectorii coloană u, z și matricile A (matricea unitate 3×3) și B:</p>${mats(eqm('v', '1 2 3'), eqm('w', '4 5 6'), eqm('u', '-1;0;1'), eqm('z', '2;0;-1'))}${mats(eqm('A', '1 0 0;0 1 0;0 0 1'), eqm('B', '2 0 1;1 1 1;-1 2 -2'))}`, solution: `${ml(`>> v=[1 2 3]; w=[4 5 6];
+    { title: 'Definirea vectorilor și matricilor', statement: `<p>Definiți în MATLAB vectorii și matricile de mai jos:</p>${mats(eqm('v', '1 2 3') + ';', eqm('w', '4 5 6') + ';')}<p>a)</p>${mats(eqm('u', '-1;0;1') + ';', eqm('z', '2;0;-1') + ';')}<p>b)</p>${mats(eqm('A', '1 0 0;0 1 0;0 0 1') + ';', eqm('B', '2 0 1;1 1 1;-1 2 -2') + ';')}`, solution: `${ml(`>> v=[1 2 3]; w=[4 5 6];
 >> u=[-1;0;1]; z=[2;0;-1];
 >> A=eye(3)
 >> B=[2 0 1;1 1 1;-1 2 -2]`)}`, check: [{ var: 'v', expected: '[1 2 3]' }, { var: 'w', expected: '[4 5 6]' }, { var: 'u', expected: '[-1;0;1]' }, { var: 'z', expected: '[2;0;-1]' }, { var: 'A', expected: 'eye(3)' }, { var: 'B', expected: '[2 0 1;1 1 1;-1 2 -2]' }], starter: 'v=[1 2 3]; w=[4 5 6];' },
-    { title: 'Vectori cu operatorul :', statement: `<p>Creează vectorii: a) va = 2, 4, 6, 8, …, 100; b) vb = 50, 48, 46, …, −50; c) vc = 1, 1/2, 1/3, …, 1/100; d) vd = 0, 1/2, 2/3, 3/4, …, 99/100.</p>`, hint: '<p>Pentru c) și d) generează mai întâi vectorii numărătorilor și numitorilor, apoi împarte element cu element cu ' + c('./') + '.</p>', solution: `${ml(`>> va=2:2:100
+    { title: 'Vectori cu operatorul :', statement: `<p>Creați vectorii va, vb, vc și vd care să aibă următoarele elemente:</p>
+<p>a) 2,4,6,8,…,100;</p>
+<p>b) 50,48,46,…,-50;</p>
+<p>c) 1,1/2,1/3,…,1/100;</p>
+<p>d) 0,1/2,2/3,3/4,…,99/100.</p>`, hint: '<p>Pentru c) și d) generează mai întâi vectorii numărătorilor și numitorilor, apoi împarte element cu element cu ' + c('./') + '.</p>', solution: `${ml(`>> va=2:2:100
 >> vb=50:-2:-50
 >> vt=1:100; vc=1./vt
 >> vt1=0:99; vt2=1:100; vd=vt1./vt2`)}`, check: [{ var: 'va', expected: '2:2:100' }, { var: 'vb', expected: '50:-2:-50' }, { var: 'vc', expected: '1./(1:100)' }, { var: 'vd', expected: '(0:99)./(1:100)' }] },
-    { title: 'Concatenare', statement: `<p>Prin concatenarea vectorilor și matricilor de mai sus definește:</p><p>a) vectorul linie r și vectorul coloană t:</p>${mats(eqm('r', '1 2 3 4 5 6'), eqm('t', '2;0;-1;-1;0;1'))}<p>b) matricea C (stânga-sus zerouri 3×3, dreapta-sus 5·I<sub>3</sub>, stânga-jos B, dreapta-jos numai 3):</p>${mats(eqm('C', '0 0 0 5 0 0;0 0 0 0 5 0;0 0 0 0 0 5;2 0 1 3 3 3;1 1 1 3 3 3;-1 2 -2 3 3 3'))}`, solution: `${ml(`>> r=[v w]; t=[z;u]
+    { title: 'Concatenare', statement: `<p>Prin concatenarea matricilor și vectorilor de mai sus, definiți în MATLAB:</p><p>a)</p>${mats(eqm('r', '1 2 3 4 5 6') + ';', eqm('t', '2;0;-1;-1;0;1') + ';')}<p>b)</p>${mats(eqm('C', '0 0 0 5 0 0;0 0 0 0 5 0;0 0 0 0 0 5;2 0 1 3 3 3;1 1 1 3 3 3;-1 2 -2 3 3 3') + ';')}`, solution: `${ml(`>> r=[v w]; t=[z;u]
 >> C=[zeros(3) 5*eye(3);B 3*ones(3)]`)}`, check: [{ var: 'r', expected: '[1 2 3 4 5 6]' }, { var: 't', expected: '[2;0;-1;-1;0;1]' }, { var: 'C', expected: '[zeros(3) 5*eye(3);[2 0 1;1 1 1;-1 2 -2] 3*ones(3)]' }] },
-    { title: 'Matrici bandă cu diag', statement: `<p>Cu ${c('diag(v,n)')} definește matricile:</p>${mats(eqm('D', '0 0 1 0 0 0;0 0 0 1 0 0;0 0 0 0 1 0;-2 0 0 0 0 1;0 -2 0 0 0 0;0 0 -2 0 0 0'), eqm('E', '2 1 0 0 0 0;1 2 1 0 0 0;0 1 2 1 0 0;0 0 1 2 1 0;0 0 0 1 2 1;0 0 0 0 1 2'))}`, hint: '<p>Un vector de lungime 6−|k| pe diagonala k dă o matrice 6×6. Adună mai multe apeluri ' + c('diag') + '.</p>', solution: `${ml(`>> D=-2*diag(ones(1,3),-3)+diag(ones(1,4),2)
+    { title: 'Matrici bandă cu diag', statement: `<p>Cu ajutorul funcției diag(v,n), (unde n este distanța de la diagonala principală), definiți:</p><p>a)</p>${mats(eqm('D', '0 0 1 0 0 0;0 0 0 1 0 0;0 0 0 0 1 0;-2 0 0 0 0 1;0 -2 0 0 0 0;0 0 -2 0 0 0') + ';')}<p>b)</p>${mats(eqm('E', '2 1 0 0 0 0;1 2 1 0 0 0;0 1 2 1 0 0;0 0 1 2 1 0;0 0 0 1 2 1;0 0 0 0 1 2') + ';')}`, hint: '<p>Un vector de lungime 6−|n| pe diagonala n dă o matrice 6×6. Adună mai multe apeluri ' + c('diag') + '.</p>', solution: `${ml(`>> D=-2*diag(ones(1,3),-3)+diag(ones(1,4),2)
 >> E=diag(ones(1,5),-1)+2*diag(ones(1,6))+diag(ones(1,5),1)`)}`, check: [{ var: 'D', expected: '-2*diag(ones(1,3),-3)+diag(ones(1,4),2)' }, { var: 'E', expected: 'diag(ones(1,5),-1)+2*diag(ones(1,6))+diag(ones(1,5),1)' }] },
-    { title: 'Calcule cu matricile definite', statement: `<p>Calculează: a) v·z și r·t; b) A·u − B·z; c) C<sup>3</sup> + D<sup>3</sup> − 15·E<sup>3</sup>; d) B·B<sup>2</sup> − 5·B<sup>−1</sup>; e) D<sup>5</sup>; f) D·E − E·D; g) D.*E − E.*D; h) sin(D) − cos(E).</p>`, hint: '<p>v·z este produs de vector linie cu vector coloană: ' + c('v*z') + '. Inversa este ' + c('inv(B)') + '. La g) rezultatul este matricea nulă – înmulțirea element cu element este comutativă.</p>', solution: `${ml(`>> v*z
+    { title: 'Calcule cu matricile definite', statement: `<p>Utilizând matricile și vectorii definiți în exercițiile 1., 2. și 3, calculați:</p>
+<p>a) v·z = ; r·t = ;</p>
+<p>b) A·u − B·z = ;</p>
+<p>c) C<sup>3</sup> + D<sup>3</sup> − 15·E<sup>3</sup> = ;</p>
+<p>d) |B|·B<sup>2</sup> − 5·B<sup>−1</sup> = ;</p>
+<p>e) D<sup>5</sup> = ;</p>
+<p>f) D·E − E·D = ;</p>
+<p>g) D.∗E − E.∗D = ;</p>
+<p>h) sin(D) − cos(E) = ;</p>`, hint: '<p>v·z este produs de vector linie cu vector coloană: ' + c('v*z') + '. |B| este determinantul, ' + c('det(B)') + ', iar B<sup>−1</sup> este ' + c('inv(B)') + '. Matricile D și E sunt cele din exercițiul 4.</p>', solution: `${ml(`>> v*z
 >> r*t
 >> A*u-B*z
 >> C^3+D^3-15*E^3
->> B*B^2-5*inv(B)
+>> det(B)*B^2-5*inv(B)
 >> D^5
 >> D*E-E*D
 >> D.*E-E.*D
->> sin(D)-cos(E)`)}<p>v·z = −1, r·t = 1, A·u − B·z = (−4, −1, 1)<sup>T</sup>; g) dă matricea nulă (operațiile cu punct comută), pe când f) nu.</p>` },
-    { title: 'Matrici bloc din A și B', statement: `<p>Definește matricile 6×6 G și H, scrise pe blocuri (O<sub>3</sub> este matricea nulă 3×3):</p>${mats(eqm('G', 'A O<sub>3</sub>;O<sub>3</sub> B'), eqm('H', 'A −A;B B'))}`, solution: `${ml(`>> G=[A zeros(3);zeros(3) B]
+>> sin(D)-cos(E)`)}<p>a) v*z = −1, r*t = 1</p><p>b) ${mat('-4;-1;1')}</p><p>c) ${mat('-180 -167 -90 170 135 160;-180 -255 -229 70 145 160;-60 -180 -300 -117 95 70;54 1 -225 18 104 198;68 81 -90 93 33 76;64 75 10 168 63 18')}</p><p>d) ${mat('-19.0000 -8.0000 -1.0000;-9.0000 -18.0000 -1.0000;-7.0000 6.0000 -23.0000')}</p><p>e) ${mat('4 0 0 0 0 -2;0 8 0 0 0 0;0 0 8 0 0 0;0 0 0 8 0 0;0 0 0 0 8 0;-8 0 0 0 0 4')}</p><p>f) ${mat('0 1 0 0 0 0;0 0 0 0 0 0;2 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 -1;0 0 0 -2 0 0')}</p><p>g) ${mat('0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0')}</p><p>h) ${mat('0.4161 -0.5403 -0.1585 -1.0000 -1.0000 -1.0000;-0.5403 0.4161 -0.5403 -0.1585 -1.0000 -1.0000;-1.0000 -0.5403 0.4161 -0.5403 -0.1585 -1.0000;-1.9093 -1.0000 -0.5403 0.4161 -0.5403 -0.1585;-1.0000 -1.9093 -1.0000 -0.5403 0.4161 -0.5403;-1.0000 -1.0000 -1.9093 -1.0000 -0.5403 0.4161')}</p>` },
+    { title: 'Matrici bloc din A și B', statement: `<p>Utilizând matricile A și B să se definească matricile:</p><p>a)</p>${mats(eqm('G', '1 0 0 0 0 0;0 1 0 0 0 0;0 0 1 0 0 0;0 0 0 2 0 1;0 0 0 1 1 1;0 0 0 -1 2 -2') + ';')}<p>b)</p>${mats(eqm('H', '1 0 0 -1 0 0;0 1 0 0 -1 0;0 0 1 0 0 -1;2 0 1 2 0 1;1 1 1 1 1 1;-1 2 -2 -1 2 -2'))}`, solution: `${ml(`>> G=[A zeros(3);zeros(3) B]
 >> H=[A -A;B B]`)}`, check: [{ var: 'G', expected: '[eye(3) zeros(3);zeros(3) [2 0 1;1 1 1;-1 2 -2]]' }, { var: 'H', expected: '[eye(3) -eye(3);[2 0 1;1 1 1;-1 2 -2] [2 0 1;1 1 1;-1 2 -2]]' }] },
-    { title: 'Accesare și selecție', statement: `<p>a) vectorul elementelor de pe pozițiile impare ale lui r; b) vectorul elementelor pozitive ale lui H; c) suma elementelor lui H; d) matricea elementelor lui H de la intersecția liniilor 1, 2, 3 cu coloanele 2, 4, 6; e) vectorul ri cu elementele lui r în ordine inversă.</p>`, solution: `${ml(`>> r(1:2:end)
+    { title: 'Accesare și selecție', statement: `<p>Să se creeze sau calculeze, după caz:</p>
+<p>a) Vectorul elementelor impare ale lui r;</p>
+<p>b) Vectorul elementelor pozitive ale lui H;</p>
+<p>c) Suma elementelor lui H;</p>
+<p>d) Matricea elementelor lui H aflate la intersecția liniilor 1,2 și 3 cu coloanele 2,4 și 6;</p>
+<p>e) vectorul ri in care elementele lui r sunt în ordine inversă.</p>`, solution: `${ml(`>> r(1:2:end)
 >> H(H>0)
 >> sum(H(:))
 >> H(1:3,2:2:end)
 >> ri=r(end:-1:1)`)}`, check: [{ var: 'ri', expected: '[6 5 4 3 2 1]' }] },
-    { title: 'Selecții din matricea B', statement: `<p>Folosind B, scrie comenzile pentru: a) un vector cu elementele primei linii; b) o matrice cu ultimele două linii; c) vectorul sumelor pe coloane; d) vectorul sumelor pe linii; e) matricea elementelor din colțurile lui B.</p>`, solution: `${ml(`>> va=B(1,1:end)
+    { title: 'Selecții din matricea B', statement: `<p>Utilizând matricea B definită la 1.c) scrieți comenzile necesare pentru a obține:</p>
+<p>a) un vector format din elementele primei linii a lui B;</p>
+<p>b) o matrice formată cu ultimele două linii ale lui B;</p>
+<p>c) un vector a cărui elemente sunt sumele elementelor din coloanele lui B;</p>
+<p>d) un vector a cărui elemente sunt sumele elementelor din liniile lui B;</p>
+<p>e) o matrice formată din elementele din colțurile lui B.</p>`, solution: `${ml(`>> va=B(1,1:end)
 >> Bb=B(end-1:end,1:end)
 >> xc=sum(B)
 >> xd=sum(B,2)
->> Bd=B([1,end],[1,end])`)}<p>La d), a doua valoare din ${c('sum')} indică dimensiunea după care se face suma (implicit 1, deci pe coloane).</p>`, check: [{ var: 'xc', expected: '[2 3 0]' }, { var: 'xd', expected: '[3;3;-1]' }, { var: 'Bd', expected: '[2 1;-1 -2]' }] },
+>> Bd=B([1,end],[1,end])`)}<p>La d), a doua valoare din ${c('sum')} indică după ce dimensiune se face suma (implicit are valoarea 1, deci sumă pe coloane).</p>`, check: [{ var: 'xc', expected: '[2 3 0]' }, { var: 'xd', expected: '[3;3;-1]' }, { var: 'Bd', expected: '[2 1;-1 -2]' }] },
   ],
 });

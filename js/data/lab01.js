@@ -1,3 +1,8 @@
+{
+/* radical cu bară: rad('1+x') -> √ cu linie deasupra argumentului */
+/* paranteză înaltă în jurul fracțiilor: big('(', 2.4) */
+const big = (ch, em) => '<span style="font-size:' + em + 'em;font-weight:200;line-height:1;vertical-align:middle">' + ch + '</span>';
+const rad = s => '√<span style="border-top:1px solid currentColor;padding-top:3px;display:inline-block;line-height:1.2">' + s + '</span>';
 LABS.push({
   id: 1,
   title: 'Expresii și calcule',
@@ -122,31 +127,65 @@ ans =
     { type: 'mc', q: 'Ce afișează ' + c('sqrt(5+log(7))') + '? (indiciu: ln 7 ≈ 1.946)', options: ['2.6355', '2.4370', '3.3166', '1.9459'], answer: 0, explain: '√(5 + 1.9459) = √6.9459 = 2.6355.' },
   ],
   exercises: [
-    { title: 'Care expresie este mai mare?', statement: `<p>a) 2<sup>π</sup> sau π<sup>2</sup>; b) π + √(1 + π<sup>2</sup>) sau π<sup>1+√(1+π)</sup>; c) sin(π/3) + cos(π/4) sau π<sup>sin(π/3)+cos(π/4)</sup>.</p>`, hint: '<p>Calculează diferența celor două expresii: semnul rezultatului spune care este mai mare.</p>', solution: `<p>a) ${c('2^pi-pi^2')} dă −1.0446, deci 2<sup>π</sup> &lt; π<sup>2</sup>. Analog b) și c).</p>${ml(`>> 2^pi-pi^2
->> pi+sqrt(1+pi^2) - pi^(1+sqrt(1+pi))
->> sin(pi/3)+cos(pi/4) - pi^(sin(pi/3)+cos(pi/4))`)}` },
-    { title: 'Calculează', statement: `<p>a) ${frac('1 + √5', '2')}; b) ((√2)<sup>π</sup>)<sup>√3</sup>; c) π<sup>2</sup> − 10 cos<sup>2</sup>(π/3).</p>`, solution: `<p>a) ${c('(1+sqrt(5))/2')} = 1.6180; b) ${c('(sqrt(2)^pi)^sqrt(3)')} = 6.5919; c) ${c('pi^2-10*cos(pi/3)^2')} = 7.3696.</p>${ml(`>> (1+sqrt(5))/2
+    { title: 'Care expresie este mai mare?', statement: `<p>Care dintre expresii este mai mare?</p>
+<p>a) 2<sup>π</sup> <i>sau</i> π<sup>2</sup>;</p>
+<p>b) π + ${rad('1+π<sup>2</sup>')} <i>sau</i> π<sup>1+${rad('1+π<sup>2</sup>')}</sup>;</p>
+<p>c) ${big('(', 1.8)}sin ${frac('π', '3')} + cos ${frac('π', '4')}${big(')', 1.8)}<sup>π</sup> <i>sau</i> π<sup>sin(π/3)+cos(π/4)</sup>.</p>`, hint: '<p>Calculează diferența celor două expresii: semnul rezultatului spune care este mai mare.</p>', solution: `${ml(`>> 2^pi-pi^2`)}<p>a) rezultatul este −1.0446, deci 2<sup>π</sup> &lt; π<sup>2</sup>. Analog și punctele b) și c):</p>${ml(`>> pi+sqrt(1+pi^2) - pi^(1+sqrt(1+pi^2))
+>> (sin(pi/3)+cos(pi/4))^pi - pi^(sin(pi/3)+cos(pi/4))`)}<p>Ambele diferențe sunt negative (−130.3997, respectiv −1.9035), deci în ambele cazuri expresia din dreapta este mai mare.</p>` },
+    { title: 'Să se calculeze', statement: `<p>Să se calculeze:</p>
+<p>a) ${frac('1+' + rad('5'), '2')} =</p>
+<p>b) [(${rad('2')})<sup>π</sup>]<sup>√3</sup> =</p>
+<p>c) |π<sup>2</sup> − 10·cos<sup>2</sup> ${frac('π', '3')}| =</p>`, solution: `${ml(`>> (1+sqrt(5))/2
 >> (sqrt(2)^pi)^sqrt(3)
->> pi^2-10*cos(pi/3)^2`)}` },
-    { title: 'Valoarea fracțiilor', statement: `<p>a) ${frac('3<sup>π</sup> − π<sup>3</sup>', frac('1 + √3', '3'))} ridicat la puterea π/√3; b) ${frac('ln(56) + sin(cos 44.67)', '3 ln(678) + lg(223.38) − tg(sin(π/3))')}; c) fracția continuă 1 / (1 + 2 / (1 + 3 / (1 + 2 / (1 + 5 / (1 + 6))))).</p>`, hint: '<p>lg este ' + c('log10') + ', ln este ' + c('log') + ', tg este ' + c('tan') + '. Pune fiecare numitor între paranteze.</p>', solution: `<p>a) 0.3849; b) 2.4231; c) 0.5576.</p>${ml(`>> ((3^pi-pi^3)/((1+sqrt(3))/3))^(pi/sqrt(3))
->> (log(56)+sin(cos(44.67)))/(3*log(678)+log10(223.38)-tan(sin(pi/3)))
->> 1/(1+2/(1+3/(1+2/(1+5/(1+6)))))`)}` },
-    { title: 'Calcule cu constante speciale', statement: `<p>a) ${c('realmax + 2')}; b) ${c('inf - inf')}; c) ${c('nan + 2')}; d) ${c('realmax - realmin')}; e) ${c('inf / inf')}; f) ${c('0 * inf')}.</p>`, solution: `<p>a) realmax; b) NaN; c) NaN; d) realmax; e) NaN; f) NaN.</p>${ml(`>> realmax+2
+>> abs(pi^2-10*cos(pi/3)^2)`)}<p>a) 1.6180; b) 6.5919; c) 7.3696.</p>` },
+    { title: 'Valoarea fracțiilor', statement: `<p>Să se afle valoarea fracțiilor:</p>
+<p>a) ${big('(', 3)}${frac('3<sup>π</sup> − π<sup>3</sup>', frac('1+' + rad('3'), '3'))}${big(')', 3)}<sup style="vertical-align:1.6em">π/√3</sup> =</p>
+<p>b) ${frac('ln(56) + sin(cos ' + rad('44.67') + ')', '<sup>3</sup>' + rad('ln(678) + lg(223.38) − tg(sin ' + frac('π', '√3') + ')'))} =</p>
+<p>c) ${frac('1', '1+' + frac(rad('2'), '1+' + frac(rad('3'), '1+' + frac('2', '1+' + frac(rad('5'), '1+' + rad('6'))))))} =</p>`, hint: '<p>lg este ' + c('log10') + ', ln este ' + c('log') + ', tg este ' + c('tan') + ', radicalul de ordin 3 se scrie ' + c('x^(1/3)') + '. Pune fiecare numitor între paranteze.</p>', solution: `${ml(`>> ((3^pi-pi^3)/((1+sqrt(3))/3))^(pi/sqrt(3))
+>> (log(56)+sin(cos(sqrt(44.67))))/(log(678)+log10(223.38)-tan(sin(pi/sqrt(3))))^(1/3)
+>> 1/(1+sqrt(2)/(1+sqrt(3)/(1+2/(1+sqrt(5)/(1+sqrt(6))))))`)}<p>a) 0.3849; b) 2.4231; c) 0.5576.</p><div class="note">La b), valoarea 2.4231 din manual se obține pentru cos 44.67 (fără radical): ${c('(log(56)+sin(cos(44.67)))/(log(678)+log10(223.38)-tan(sin(pi/sqrt(3))))^(1/3)')}. Cu radicalul din enunț rezultatul este 2.4734.</div>` },
+    { title: 'Calcule cu constante speciale', statement: `<p>Să se efectueze calculele cu constante speciale:</p>
+<p>a) realmax + 2 =</p>
+<p>b) inf – inf =</p>
+<p>c) nan + 2 =</p>
+<p>d) realmax – realmin =</p>
+<p>e) inf / inf =</p>
+<p>f) 0 * inf =</p>`, solution: `${ml(`>> realmax+2
 >> inf-inf
 >> nan+2
 >> realmax-realmin
 >> inf/inf
->> 0*inf`)}` },
-    { title: 'Eroarea aproximării derivatei', statement: `<p>Pentru f(x) = sin x, calculează eroarea dintre valoarea exactă a derivatei în π/4 și aproximările ${frac('f(x+h) − f(x)', 'h')} și ${frac('f(x+h) − f(x−h)', '2h')} pentru h = 10<sup>−6</sup>, 10<sup>−8</sup>, 10<sup>−10</sup>, 10<sup>−12</sup>, 10<sup>−14</sup>. Cum explici rezultatele?</p>`, hint: '<p>Derivata exactă este cos(π/4). Eroarea este ' + c('abs(cos(pi/4) - aproximare)') + '. Definește h, apoi reia comanda pentru fiecare valoare.</p>', solution: `${ml(`>> h=1e-6;
+>> 0*inf`)}<p>a) realmax; b) NaN; c) NaN; d) realmax; e) NaN; f) NaN.</p>` },
+    { title: 'Eroarea aproximării derivatei', statement: `<p>De la analiza matematică se știe că limitele:</p>
+<p>lim<sub>h→0</sub> ${frac('f(x+h) − f(x)', 'h')} și lim<sub>h→0</sub> ${frac('f(x+h) − f(x−h)', '2·h')}</p>
+<p>sunt egale cu derivata funcției în x, f′(x). Acest lucru înseamnă că dând o valoare mică pentru h fracțiile din limitele de mai sus aproximează derivata. Luând f(x)=sin x să se calculeze eroarea dintre valoarea exactă a derivatei în ${frac('π', '4')} și aceste aproximări pentru:</p>
+<p>a) h=10<sup>-6</sup>;</p>
+<p>b) h=10<sup>-8</sup>;</p>
+<p>c) h=10<sup>-10</sup>;</p>
+<p>d) h=10<sup>-12</sup>;</p>
+<p>e) h=10<sup>-14</sup>.</p>
+<p>Cum explicați rezultatele?</p>`, hint: '<p>Derivata exactă este cos(π/4). Eroarea este ' + c('abs(cos(pi/4) - aproximare)') + '. Definește h, apoi reia comanda pentru fiecare valoare.</p>', solution: `<p>Erorile sunt date de ${c('abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4))/h)')}, respectiv ${c('abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4-h))/h/2)')}.</p>${ml(`>> h=0.000001;
 >> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4))/h)
 >> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4-h))/h/2)
->> h=1e-8;
+>> h=0.00000001;
 >> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4))/h)
+>> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4-h))/h/2)
+>> h=0.0000000001;
+>> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4))/h)
+>> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4-h))/h/2)
+>> h=0.000000000001;
+>> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4))/h)
+>> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4-h))/h/2)
 >> h=1e-14;
->> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4))/h)`)}<p>Erorile: h=10<sup>−6</sup>: 3.5e−7 și 5.3e−11; h=10<sup>−8</sup>: 3.1e−9 și 3.1e−9; h=10<sup>−10</sup>: 9.2e−7 și 3.7e−7; h=10<sup>−12</sup>: 5.7e−6 și 6.1e−5; h=10<sup>−14</sup>: 0.0034 și 0.0021. Fracțiile nu tind la derivată: erorile de rotunjire se acumulează (împărțim două numere foarte mici; sin și cos sunt și ele aproximate). Folosește h ≈ 10<sup>−7</sup>…10<sup>−8</sup>.</p>` },
-    { title: 'Expresii pentru x = 0.5 și t = 2', statement: `<p>a) (x<sup>3</sup> + 1) ln(1 + t + t<sup>2</sup>); b) e<sup>x+t</sup>(1 + x + cos t); c) ${frac('cos<sup>2</sup> x + arctg t', 'x + t + e<sup>x<sup>t</sup></sup>')}.</p>`, solution: `<p>a) 1.6704; b) 11.2300; c) 0.5121.</p>${ml(`>> x=0.5; t=2;
+>> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4))/h)
+>> abs(cos(pi/4)-(sin(pi/4+h)-sin(pi/4-h))/h/2)`)}<p>Rezultatele din manual: a) 3.5344e-007 și 5.2650e-011; b) 3.0503e-009 și 3.0503e-009; c) 9.2454e-007 și 3.6942e-007; d) 5.7368e-006 și 6.1248e-005; e) 0.0034 și 0.0021.</p><p>Este surprinzător dar fracțiile nu tind la derivata în ${frac('π', '4')}!!? Motivul este în principal erorile de calcul care se acumulează (precizia este mică la mașinile pe 32 biți). De remarcat este faptul că și funcțiile elementare sin(x) și cos(x) sunt și ele calculate și au erori de aproximare. În plus aici este vorba de o nedeterminare de forma ${frac('0', '0')} și deci se împart două numere foarte mici. Ca și sfat în astfel de calcule utilizați valori pentru h la jumătatea preciziei maxime, deci 10<sup>-7</sup> sau 10<sup>-8</sup>. Se observă că precizia atinsă atunci este în jur de 10<sup>-8</sup>, 10<sup>-9</sup> o precizie satisfăcătoare pentru mașinile de 32 biți. Precizia se va dubla odată cu trecerea la procesoare pe 64 biți.</p>` },
+    { title: 'Expresii pentru x = 0.5 și t = √2', statement: `<p>Pentru x=0.5 și t=${rad('2')} calculați expresiile:</p>
+<p>a) (x<sup>3</sup> + 1)·ln(1 + t + t<sup>2</sup>) =</p>
+<p>b) e<sup>x+t</sup>·(1 + x + cos t) =</p>
+<p>c) ${frac('cos<sup>2</sup> x + arctg t', 'x + t + e<sup>x<sup>t</sup></sup>')} =</p>`, solution: `${ml(`>> x=0.5; t=sqrt(2);
 >> (x^3+1)*log(1+t+t^2)
 >> exp(x+t)*(1+x+cos(t))
->> ((cos(x))^2+atan(t))/(x+t+exp(x^t))`)}`, check: [{ var: 'x', expected: '0.5' }, { var: 't', expected: '2' }] },
+>> ((cos(x))^2+atan(t))/(x+t+exp(x^t))`)}<p>a) 1.6704; b) 11.2300; c) 0.5121.</p>`, check: [{ var: 'x', expected: '0.5' }, { var: 't', expected: 'sqrt(2)' }] },
   ],
 });
+}
