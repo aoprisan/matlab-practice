@@ -122,45 +122,78 @@ LABS.push({
     { type: 'mc', q: 'Ce face ' + c('x=x.*(x>0)') + ' pentru x = sin(t)?', options: ['pune 0 în locul valorilor negative (semnal sinusoidal discontinuu)', 'pune 0 în locul valorilor pozitive', 'ridică la pătrat', 'nimic'], answer: 0, explain: 'Înmulțirea cu 0/1 anulează exact elementele care nu verifică condiția.' },
   ],
   exercises: [
-    { title: 'Comparații și operatori logici', statement: `<p>x = [1 5 2 8 9 0 1], y = [5 2 2 6 0 0 2]. Execută și explică: a) x &gt; y; b) y &lt; x; c) x == y; d) x &lt;= y; e) y &gt;= x; f) x | y; g) x &amp; y; h) x &amp; (~y); i) (x &gt; y) | (y &lt; x); j) (x &gt; y) &amp; (y &lt; x).</p>`, solution: `${ml(`>> x=[1 5 2 8 9 0 1]; y=[5 2 2 6 0 0 2];
+    { title: 'Comparații și operatori logici', statement: `<p>1. Fie vectorii x = [1 5 2 8 9 0 1] și y = [5 2 2 6 0 0 2]. Executați și explicați rezultatele următoarelor comenzi:</p>
+      <p>a) x &gt; y<br>b) y &lt; x<br>c) x == y<br>d) x &lt;= y<br>e) y &gt;= x<br>f) x | y<br>g) x &amp; y<br>h) x &amp; (~y)<br>i) (x &gt; y) | (y &lt; x)<br>j) (x &gt; y) &amp; (y &lt; x)</p>`, solution: `${ml(`>> x=[1 5 2 8 9 0 1]; y=[5 2 2 6 0 0 2];
 >> x>y
+>> y<x
 >> x==y
+>> x<=y
+>> y>=x
 >> x|y
 >> x&y
 >> x&(~y)
->> (x>y)|(y<x)`)}<p>a) 0 1 0 1 1 0 0 – 1 unde elementul lui x este mai mare decât cel al lui y. Analog pentru restul; i) și j) coincid cu a) pentru că y&lt;x este aceeași condiție.</p>`, check: [{ var: 'x', expected: '[1 5 2 8 9 0 1]' }, { var: 'y', expected: '[5 2 2 6 0 0 2]' }] },
-    { title: 'Indexare logică', statement: `<p>x = 1:10, y = [3 1 5 6 8 2 9 4 7 0]. Interpretează: a) x((x &gt; 3) &amp; (x &lt; 8)); b) x(x &gt; 5); c) y(x &lt;= 4); d) x((x &lt; 2) | (x &gt;= 8)); e) y((x &lt; 2) | (x &gt;= 8)); f) x(y &lt; 0).</p>`, solution: `${ml(`>> x=1:10; y=[3 1 5 6 8 2 9 4 7 0];
+>> (x>y)|(y<x)
+>> (x>y)&(y<x)`)}<p>a) ${c('ans = 0 1 0 1 1 0 0')}. Vectorul rezultat are 1 pe poziția în care elementul lui x este mai mare decât elementul lui y și 0 unde elementul lui x este mai mic sau egal cu elementul corespunzător al lui y. Analog pentru restul comenzilor.</p>`, check: [{ var: 'x', expected: '[1 5 2 8 9 0 1]' }, { var: 'y', expected: '[5 2 2 6 0 0 2]' }] },
+    { title: 'Indexare logică', statement: `<p>2. Fie vectorii x = 1:10 și y = [3 1 5 6 8 2 9 4 7 0]. Execută și interpretează următoarele comenzi de indexare logică:</p>
+      <p>a) x((x &gt; 3) &amp; (x &lt; 8))<br>b) x(x &gt; 5)<br>c) y(x &lt;= 4)<br>d) x( (x &lt; 2) | (x &gt;= 8) )<br>e) y( (x &lt; 2) | (x &gt;= 8) )<br>f) x(y &lt; 0)</p>`, solution: `${ml(`>> x=1:10; y=[3 1 5 6 8 2 9 4 7 0];
 >> x((x>3)&(x<8))
 >> x(x>5)
 >> y(x<=4)
 >> x((x<2)|(x>=8))
 >> y((x<2)|(x>=8))
->> x(y<0)`)}<p>a) 4 5 6 7; b) 6..10; c) 3 1 5 6; d) 1 8 9 10; e) 3 4 7 0; f) matrice vidă.</p>` },
-    { title: 'Modificări selective', statement: `<p>x = [3 15 9 12 −1 0 −12 9 6 1]. Determină comanda care: a) a = x cu elementele pozitive înlocuite cu 0; b) b = x cu elementele divizibile cu 3 înlocuite cu 5 (manualul cere 1, dar soluția pune 5); c) c = x cu elementele pare înmulțite cu 5; d) d = doar elementele &gt; 10; e) e = x cu elementele mai mici decât media înlocuite cu 0; f) f = x în care elementele mai mari decât media sunt înlocuite cu diferența dintre ele și medie.</p>`, hint: '<p>' + c('rem(x,n)') + ' dă restul; ' + c('~rem(x,3)') + ' este 1 la divizibile. Media: ' + c('mean(x)') + '.</p>', solution: `${ml(`>> x=[3 15 9 12 -1 0 -12 9 6 1];
+>> x(y<0)`)}<p>a) ${c('ans = 4 5 6 7')}. Analog pentru restul comenzilor.</p>` },
+    { title: 'Modificări selective', statement: `<p>3. Fie x=[3 15 9 12 -1 0 -12 9 6 1]. Determinați comanda care:</p>
+      <p>a) definește vectorul a obținut din x prin schimbarea elementelor pozitive cu 0;<br>
+      b) definește vectorul b obținut din x prin schimbarea elementelor ce se divid cu 3, cu valoarea 1;<br>
+      c) definește vectorul c obținut din x prin schimbarea elementelor pare cu valoarea lor multiplicată cu 5;<br>
+      d) definește vectorul d ce va conține doar acele elemente ale lui x ce sunt mai mari ca 10;<br>
+      e) definește vectorul e obținut din x prin schimbarea elementelor ce sunt mai mici ca media elementelor lui x, cu 0;<br>
+      f) definește vectorul f obținut din x prin schimbarea elementelor ce sunt mai mari decât media elementelor lui x cu diferența dintre valoarea lor și medie.</p>`, hint: '<p>b) Se va utiliza funcția ' + c('rem(x,n)') + ', care dă restul împărțirii fiecărui element al lui x la n; ' + c('~rem(x,3)') + ' are 1 pe pozițiile elementelor care se împart exact la 3. e) Media elementelor unui vector este dată de funcția ' + c('mean(x)') + '.</p>', solution: `${ml(`>> x=[3 15 9 12 -1 0 -12 9 6 1];
 >> a=x; a(x>0)=0
 >> b=x; b(~rem(x,3))=5
 >> c=x; c(~rem(x,2))=5*c(~rem(x,2))
 >> d=x(x>10)
 >> e=x; e(x<mean(x))=0
->> f=x; f(x>mean(x))=f(x>mean(x))-mean(x)`)}<p>a) 0 0 0 0 −1 0 −12 0 0 0; b) 5 5 5 5 −1 5 5 5 5 1; c) 3 15 9 60 −1 0 −60 9 30 1; d) 15 12; e) 0 15 9 12 0 0 0 9 6 0; f) 3 10.8 4.8 7.8 −1 0 −12 4.8 1.8 1.</p>`, check: [{ var: 'a', expected: '[0 0 0 0 -1 0 -12 0 0 0]' }, { var: 'b', expected: '[5 5 5 5 -1 5 5 5 5 1]' }, { var: 'c', expected: '[3 15 9 60 -1 0 -60 9 30 1]' }, { var: 'd', expected: '[15 12]' }, { var: 'e', expected: '[0 15 9 12 0 0 0 9 6 0]' }, { var: 'f', expected: '[3 10.8 4.8 7.8 -1 0 -12 4.8 1.8 1]' }] },
-    { title: 'Funcție definită pe ramuri și semnal discontinuu', statement: `<p>a) x = randperm(35). Evaluează y(x) = 2 dacă x &lt; 6; x − 4 dacă 6 ≤ x ≤ 20; 36 − x dacă 20 ≤ x ≤ 35, cu indexare logică; verifică desenând graficul. b) Desenează semnalul sinusoidal discontinuu x(t) = sin t unde sin t &gt; 0 și 0 altfel, pentru t ∈ [0, 10] s.</p>`, hint: '<p>Creează y cu ' + c('ones(size(x))') + ', apoi atribuie pe fiecare ramură. La b) înmulțește cu ' + c('(x>0)') + '.</p>', solution: `${ml(`>> x=randperm(35);
+>> f=x; f(x>mean(x))=f(x>mean(x))-mean(x)`)}<p>a) 0 0 0 0 −1 0 −12 0 0 0; b) 5 5 5 5 −1 5 5 5 5 1; c) 3 15 9 60 −1 0 −60 9 30 1; d) 15 12; e) 0 15 9 12 0 0 0 9 6 0; f) 3.0000 10.8000 4.8000 7.8000 −1.0000 0 −12.0000 4.8000 1.8000 1.0000.</p><div class="note">La b) soluția din manual pune valoarea 5; pentru valoarea 1 cerută în enunț comanda este ${c('b=x; b(~rem(x,3))=1')}.</div>`, check: [{ var: 'a', expected: '[0 0 0 0 -1 0 -12 0 0 0]' }, { var: 'c', expected: '[3 15 9 60 -1 0 -60 9 30 1]' }, { var: 'd', expected: '[15 12]' }, { var: 'e', expected: '[0 15 9 12 0 0 0 9 6 0]' }, { var: 'f', expected: '[3 10.8 4.8 7.8 -1 0 -12 4.8 1.8 1]' }] },
+    { title: 'Funcție pe ramuri și semnal discontinuu', statement: `<p>4. a) Creați vectorul x=randperm(35) (funcția randperm(n) generează o permutare aleatoare a numerelor naturale de la 1 la 35). Evaluați funcția:</p>
+      <p>y(x) = ${sys(['<span style="display:inline-block;min-width:3.6em">2</span><i>daca</i> x &lt; 6', '<span style="display:inline-block;min-width:3.6em">x − 4</span><i>daca</i> 6 &lt;= x &lt;= 20', '<span style="display:inline-block;min-width:3.6em">36 − x</span><i>daca</i> 20 &lt;= x &lt;= 35'])}</p>
+      <p>utilizând indexarea logică. Verificați răspunsul desenând graficul lui y(x).</p>
+      <p>b) Desenați graficul funcției de semnal sinusoidal discontinuu :</p>
+      <p>x(t) = ${sys(['<span style="display:inline-block;min-width:3.6em">sin(t)</span><i>daca</i> sin(t) &gt; 0', '<span style="display:inline-block;min-width:3.6em">0</span><i>daca</i> sin(t) ≤ 0'])} &nbsp;pentru t=1,…,10s,</p>
+      <p>utilizând indexarea logică.</p>`, hint: '<p>a) Creați vectorul y de aceeași dimensiune cu x, numai cu cifra 1: ' + c('y=ones(size(x))') + ', apoi calculați valorile lui y pe fiecare ramură cu indexarea logică. b) Puneți valoarea 0 în locul valorilor negative ale lui x: ' + c('x=x.*(x>0)') + '.</p>', solution: `${ml(`>> x=randperm(35);
 >> y=ones(size(x));
 >> y(x<6)=2;
 >> y((x>=6)&(x<20))=x((x>=6)&(x<20))-4;
 >> y((x>=20)&(x<=35))=36-x((x>=20)&(x<=35));
->> plot(x,y,'or')
->> t=0:0.1:10; x=sin(t); x=x.*(x>0);
->> plot(t,x); axis([0 10 -0.1 1.1]); xlabel('Timpul [s]'); ylabel('Amplitudinea'); title('Semnal sinusoidal discontinuu')`)}` },
-    { title: 'Evitarea împărțirii cu zero', statement: `<p>x = [7 3 0 5 −2 0 −1 0 π]. y = sin(x)./x dă NaN unde x este 0, ceea ce strică de exemplu suma elementelor. Cum ieși din situație?</p>`, solution: `${ml(`>> x=[7 3 0 5 -2 0 -1 0 pi];
+>> plot(x,y,'or')`)}${ml(`>> t=0:0.1:10;
+>> x=sin(t);
+>> x=x.*(x>0);
+>> plot(t,x)
+>> axis([0 10 -0.1 1.1])
+>> xlabel('Timpul [s]')
+>> ylabel('Amplitudinea')
+>> title('Semnal sinusoidal discontinuu')`)}` },
+    { title: 'Evitarea împărțirii cu zero', statement: `<p>5. Problema evitării operațiilor neconvenabile. În unele situații avem un vector cu unele elemente 0. Dacă cu acest vector facem diverse calcule putem ajunge ca să efectuăm operații interzise ca de exemplu împărțiri cu 0. De exemplu:</p>
+      ${mls(`>> x=[7 3 0 5 -2 0 -1 0 pi]
+x =
+  7.0000  3.0000  0  5.0000  -2.0000  0  -1.0000  0  3.1416
+>> y= sin(x)./x
+Warning: Divide by zero.
+y =
+  0.0939  0.0470  NaN  -0.1918  0.4546  NaN  0.8415  NaN  0.0000`)}
+      <p>Se observă faptul că unde am avut elemente 0 la rezultat avem NaN fapt ce va conduce la rezultate eronate dacă, de exemplu, vom dori să calculăm suma elementelor vectorului y. Cum ieșim din această situație?</p>`, hint: '<p>În locul valorii 0 se utilizează cea mai mică valoare relativ pozitivă pe care calculatorul o poate reprezenta: eps = 2<sup>−52</sup> ≈ 2.2204e-016.</p>', solution: `${ml(`>> x=[7 3 0 5 -2 0 -1 0 pi];
 >> x=x+(x==0)*eps
->> sin(x)./x`)}<p>În locul lui 0 se pune eps = 2<sup>−52</sup>; rezultatul pe acele poziții este 1.0000.</p>`, check: [{ var: 'x', expected: '[7 3 eps 5 -2 eps -1 eps pi]' }] },
-    { title: 'Problema de balistică', statement: `<p>h(t) = v₀ t sin θ − g t²/2, v(t) = √(v₀² − 2 v₀ g t sin θ + g² t²). Proiectilul atinge solul la t<sub>g</sub> = 2 (v₀/g) sin θ. Pentru θ = 40°, v₀ = 20 m/s, g = 9.81 m/s², determină intervalul de timp în care h ≥ 6 m și simultan v ≤ 16 m/s.</p>`, hint: '<p>Discretizează t pe [0, t<sub>g</sub>] cu pasul 0.01, calculează v și h, apoi ' + c('u=find(h>6&v<16)') + '; capetele intervalului sunt ' + c('t(u(1))') + ' și ' + c('t(u(end))') + '.</p>', solution: `${ml(`>> v0=20; g=9.81; theta=40*pi/180;
+>> sin(x)./x`)}<p>Pe pozițiile foste 0 rezultatul este 1.0000.</p>`, check: [{ var: 'x', expected: '[7 3 eps 5 -2 eps -1 eps pi]' }] },
+    { title: 'O problemă de balistică', statement: `<p>6. O problemă de balistică. Înălțimea și viteza unui proiectil lansat cu viteza inițială v<sub>0</sub> și cu un unghi θ sunt date de:</p>
+      <p>h(t) = v<sub>0</sub>t sin θ − ${frac('1', '2')} gt<sup>2</sup></p>
+      <p>v(t) = √<span style="display:inline-block;border-top:1px solid currentColor;padding:1px 2px 0">v<sub>0</sub><sup>2</sup> − 2v<sub>0</sub>gt sin θ + g<sup>2</sup>t<sup>2</sup></span></p>
+      <p>Unde g este accelerația gravitațională. Proiectilul va atinge solul când h(t)=0, ceea ce conduce la timpul de revenire t<sub>g</sub> = 2(v<sub>0</sub>/g) sin θ (se egalează cu 0 prima ecuație). Pentru θ = 40°, v<sub>0</sub>=20 m/s, și g=9.81 m/s<sup>2</sup>, determinați timpul când înălțimea h nu este mai mică de 6m iar viteza este simultan cel mult 16 m/s.</p>`, hint: '<p>Calculați t<sub>g</sub>, care dă intervalul de definiție al timpului, discretizați t pe [0, t<sub>g</sub>], calculați v și h, apoi ' + c('u=find(h>6&v<16)') + '. Capetele intervalului sunt date de primul și ultimul rang din u: ' + c('t(u(1))') + ' și ' + c('t(u(end))') + '.</p>', solution: `${ml(`>> v0=20; g=9.81; theta=40*pi/180;
 >> tg=2*v0*sin(theta)/g
 >> t=0:0.01:tg;
 >> v=sqrt(v0^2-2*v0*g*sin(theta)*t+g^2*t.^2);
 >> h=v0*t*sin(theta)-0.5*g*t.^2;
 >> u=find(h>6&v<16);
 >> t1=t(u(1))
->> t2=t(u(end))`)}<p>Intervalul este [0.85, 1.78] s.</p>` },
+>> t2=t(u(end))`)}<p>Soluția problemei este intervalul [t1, t2] = [0.85, 1.78].</p>` },
   ],
 });

@@ -167,7 +167,16 @@ end`)}
     { type: 'mc', q: 'Ce face ' + c('linspace(0,10,512)') + '?', options: ['512 puncte egal distanțate între 0 și 10', 'vectorul 0:512:10', '10 puncte între 0 și 512', 'o matrice 512×512'], answer: 0, explain: '512 = 2⁹; în prelucrarea semnalelor se preferă puteri ale lui 2.' },
   ],
   exercises: [
-    { title: 'Evaluarea unei secvențe if', statement: `<p>Pentru secvența: dacă x&lt;10, y = 2x; altfel dacă x&lt;100, y = 100−x; altfel dacă x&lt;1000, y = 1000−x/2; altfel y = √x. Cât este y pentru x = 5, 50, 500, 5000?</p>`, solution: `${ml(`>> x=5;
+    { title: 'Evaluarea unei secvențe if', statement: `<p>1. Fie secvența if următoare:</p>
+      ${mls(`if x<10
+   y=2*x;
+elseif x<100
+        y=100-x;
+elseif x<1000
+        y=1000-x/2;
+else
+     y=sqrt(x)`)}
+      <p>a) Dacă x=5 cât este y?<br>b) Dacă x=50 cât este y?<br>c) Dacă x=500 cât este y?<br>d) Dacă x=5000 cât este y?</p>`, hint: '<p>Definim întâi pe x și apoi introducem secvența if (încheiată cu ' + c('end') + ').</p>', solution: `${ml(`>> x=5;
 >> if x<10
 ..     y=2*x;
 .. elseif x<100
@@ -177,8 +186,8 @@ end`)}
 .. else
 ..     y=sqrt(x);
 .. end
->> y`)}<p>a) 10; b) 50; c) 750; d) 70.7107.</p>` },
-    { title: 'scalar / vector / matrice', statement: `<p>Scrie o secvență if care, pornind de la x, pune în y unul din șirurile 'scalar', 'vector' sau 'matrice'.</p>`, hint: '<p>' + c('[l,c]=size(x)') + '; l=c=1 scalar; l=1 sau c=1 vector; altfel matrice.</p>', solution: `${ml(`>> x=[1 2 3];
+>> y`)}<p>Analog pentru celelalte valori ale lui x: a) 10; b) 50; c) 750; d) 70.7107.</p>` },
+    { title: 'scalar / vector / matrice', statement: `<p>2. Scrieți o secvență if care pornind de la o variabilă x să se introducă în variabila y unul din șirurile : 'scalar','vector' sau 'matrice' după cum este x este scalar,vector sau matrice.</p>`, hint: '<p>Vom utiliza funcția ' + c('[l,c]=size(x)') + ' care introduce în l numărul de linii, iar în c numărul de coloane ale matricii x. În MATLAB orice variabilă este o matrice. Dacă l=c=1 este vorba de un scalar. Dacă l=1 sau c=1 este vorba de un vector și x este o matrice în rest.</p>', solution: `${ml(`>> x=[1 2 3];
 >> [l,c]=size(x);
 >> if l==1&c==1
 ..     y='scalar';
@@ -188,7 +197,8 @@ end`)}
 ..     y='matrice';
 .. end
 >> y`)}` },
-    { title: 'Conversia unităților cu switch', statement: `<p>În ${c('lungime')} este valoarea unei măsurători, în ${c('unitate')} unitatea: 'ft' (picior, 0.3048 m), 'in' (inch, 0.0254 m), 'm', 'mm'. Scrie un switch-case care pune în ${c('lungime_metrii')} valoarea în metri. Pentru unități necunoscute pune NaN.</p>`, solution: `${ml(`>> lungime=4.25; unitate='ft';
+    { title: 'Conversia unităților cu switch', statement: `<p>3. În variabila lungime se află valoarea numerică a unei măsurări de lungime. Unitatea de lungime cu care s-a făcut măsurarea poate fi: 'ft' pentru picior, 'in' pentru inci, 'm' pentru metru și 'mm' pentru milimetru memorată în variabila unitate. Sa se creeze o secvență switch-case care pune în lungime_metrii valoarea în metrii ai măsurătorii.</p>`, hint: '<p>Pentru transformare: inci → metru y=0.0254*x; picior → metru y=0.3048*x; milimetru → metru y=x/1000. Este bine de utilizat și clauza ' + c('otherwise') + ': unitatea nu există și introducem NaN pentru a semnala că transformarea unităților nu s-a putut efectua.</p>', solution: `${ml(`>> lungime=4.25;
+>> unitate='ft';
 >> switch unitate
 ..     case 'in'
 ..        lungime_metrii=lungime*0.0254;
@@ -201,14 +211,18 @@ end`)}
 ..     otherwise
 ..        lungime_metrii=NaN;
 .. end
->> lungime_metrii`)}<p>4.25 ft = 1.2954 m.</p>`, check: [{ var: 'lungime_metrii', expected: '1.2954' }] },
-    { title: 'Vectorul mediilor vecinilor', statement: `<p>Dat v, construiește w cu w(i) = (v(i−1) + v(i+1))/2, considerând v(0) = 0 și v(end+1) = 0.</p>`, hint: '<p>Construiește vx = [0 v 0] și parcurge cu o buclă de la 2 la length(vx)−1, punând în w(ind−1).</p>', solution: `${ml(`>> v=[1 0 5 7 3 4 5 5 8];
->> vx=[0 v 0];
+>> lungime_metrii`)}`, check: [{ var: 'lungime_metrii', expected: '1.2954' }] },
+    { title: 'Vectorul mediilor vecinilor', statement: `<p>4. Fiind dat un vector v să se construiască un vector w ale cărui elemente sunt date de:</p>
+      <p>w(i) = ${frac('v(i − 1) + v(i + 1)', '2')}</p>
+      <p>Pentru elementul w(1) se va considera că elementul v(0)=0 (v(0) nu există). Analog, deoarece v(end+1) nu există se va considera că este 0.</p>`, hint: '<p>Se va construi vectorul vx cu size(vx)=size(v)+2, care are ca prim și ultim element pe 0. Apoi se va defini w cu formula w(i − 1) = ' + frac('v(i − 1) + v(i + 1)', '2') + '. Vom avea grijă ca bucla să înceapă de la 2 și să se termine la „length(vx)-1”.</p>', solution: `${ml(`>> v=[1 0 5 7 3 4 5 5 8]
+>> vx=[0 v 0]
 >> for ind=2:length(vx)-1
 ..     w(ind-1)=(vx(ind-1)+vx(ind+1))/2;
 .. end
->> w`)}<p>w = 0 3 3.5 4 5.5 4 4.5 6.5 2.5.</p>`, check: [{ var: 'w', expected: '[0 3 3.5 4 5.5 4 4.5 6.5 2.5]' }] },
-    { title: 'Filtru de medie cu 3 puncte', statement: `<p>y(k) = (x(k) + x(k−1) + x(k−2))/3 definește un filtru de medie. Cu un semnal sinusoidal cu zgomot aleator pe 10 s, compară graficele semnalului și ale semnalului filtrat.</p>`, hint: '<p>s = sin(2πt/5), zgomot z = 0.1·randn(size(t)), t = linspace(0,10,512). Primele două elemente filtrate: y(1) = x(1), y(2) = (x(1)+x(2))/2.</p>', solution: `${ml(`>> t=linspace(0,10,512);
+>> w`)}`, check: [{ var: 'w', expected: '[0 3 3.5 4 5.5 4 4.5 6.5 2.5]' }] },
+    { title: 'Filtru de medie cu 3 puncte', statement: `<p>5. În teoria semnalelor formula:</p>
+      <p>y(k) = ${frac('1', '2')}(x(k) + x(k − 1) + x(k − 2))</p>
+      <p>definește un filtru de medie cu 3 puncte. Filtrele sunt utilizate pentru înlăturarea zgomotului din semnal. Folosind un semnal sinusoidal cu zgomot aleatoriu comparați graficele semnalului și a semnalului filtrat. Intervalul de timp va fi de 10 s.</p>`, hint: `<p>Un semnal sinusoidal este dat de exemplu de formula s = sin(${frac('2π', '5')}t), unde t este timpul. Zgomotul poate fi obținut cu ${c('z=0.1*randn(size(t));')}; semnalul cu zgomot x este suma s + z. Pentru timp folosim ${c('linspace(a,b,n)')}, care împarte intervalul [a,b] în n intervale egale; punem n=512=2<sup>9</sup>. Pentru primul și al doilea element al semnalului filtrat nu putem aplica formula de mediere: primul element filtrat se ia chiar x(1), iar al doilea ½(x(2)+x(1)).</p>`, solution: `${ml(`>> t=linspace(0,10,512);
 >> s=sin(2*pi/5*t);
 >> z=0.1*randn(size(t));
 >> x=s+z;
@@ -218,29 +232,50 @@ end`)}
 >> for k=3:length(t)
 ..     y(k)=(x(k)+x(k-1)+x(k-2))/3;
 .. end
->> plot(t,x,'b',t,y,'r'); xlabel('timp [s]'); ylabel('amplitudine semnal'); title('Semnal cu zgomot si semnal filtrat')`)}<p>În MATLAB, cu ${c('subplot(2,1,1)')} și ${c('subplot(2,1,2)')} cele două grafice se pun unul sub altul. Semnalul filtrat a eliminat în mare măsură zgomotul.</p>` },
-    { title: 'Indicii elementului maxim și minim', statement: `<p>Determină indicii (linie, coloană) ai elementului maxim și ai celui minim dintr-o matrice, cu bucle for îmbricate și if.</p>`, solution: `${ml(`>> a=[1 2 3;0 -2 3;-2 -1 0];
+>> plot(t,x,'b',t,y,'r')
+>> xlabel('timp [s]')
+>> ylabel('amplitudine semnal')
+>> title('Semnal cu zgomot si semnal filtrat')`)}<p>În manual cele două grafice sunt puse unul sub altul (pe site, ${c('subplot')} nu este suportat, de aceea mai sus sunt suprapuse):</p>${mls(`>> subplot(2,1,1);
+>> plot(t,x)
+>> xlabel('timp [s]')
+>> ylabel('amplitudine semnal')
+>> title('Semnal sinusoidal cu zgomot')
+>> subplot(2,1,2)
+>> plot(t,y)
+>> xlabel('timp [s]')
+>> ylabel('amplitudine semnal')
+>> title('Semnal filtrat')`)}<p>Se observă faptul că semnalul filtrat a eliminat în mare măsură zgomotul.</p><div class="note">Media a 3 puncte se calculează împărțind la 3, cum face și codul din soluția manualului; factorul ${frac('1', '2')} din formula enunțului este o greșeală de tipar.</div>` },
+    { title: 'Indicii elementului maxim și minim', statement: `<p>6. Să se determine indicii (linie,coloană) ale elementului maxim și a celui minim dintr-o matrice.</p>`, hint: '<p>Problema va utiliza bucle for îmbricate. Pentru teste vom utiliza if. Vom nota lmin și cmin indicii căutați pentru elementul minim, respectiv lmax și cmax indicii elementului maxim.</p>', solution: `${ml(`>> a=[1 2 3;0 -2 3;-2 -1 0];
 >> [r,c]=size(a);
->> lmin=1; lmax=1; cmin=1; cmax=1;
->> elemin=a(1,1); elemax=a(1,1);
+>> lmin=1;lmax=1;cmin=1;cmax=1;
+>> elemin=a(1,1);
+>> elemax=a(1,1);
 >> for i=1:r
 ..     for j=1:c
 ..        if a(i,j) > elemax
-..           elemax=a(i,j); lmax=i; cmax=j;
+..           elemax=a(i,j);
+..           lmax=i;
+..           cmax=j;
 ..        end
 ..        if a(i,j) < elemin
-..           elemin=a(i,j); lmin=i; cmin=j;
+..           elemin=a(i,j);
+..           lmin=i;
+..           cmin=j;
 ..        end
 ..     end
 .. end
 >> [elemax lmax cmax]
->> [elemin lmin cmin]`)}<p>Maximul 3 este pe linia 1, coloana 3; minimul −2 pe linia 2, coloana 2. Când există mai multe maxime sau minime, este reținut primul întâlnit.</p>`, check: [{ var: 'lmax', expected: '1' }, { var: 'cmax', expected: '3' }, { var: 'lmin', expected: '2' }, { var: 'cmin', expected: '2' }] },
-    { title: 'Răcirea sticlei cu bere', statement: `<p>Afară (și berea) sunt la 30 °C; frigiderul are 10 °C. După câte minute ajunge berea la 14 °C? Model: T<sub>i+1</sub> = T<sub>i</sub> + K·(t<sub>i+1</sub> − t<sub>i</sub>)·(T<sub>f</sub> − T<sub>i</sub>), cu K = 0.05 și măsurători din minut în minut.</p>`, solution: `${ml(`>> k=0.05; tbf=14; tb=30; t=1; tf=10;
+>> [elemin lmin cmin]`)}<p>Elementul maxim este 3 și se află pe linia 1 coloana 3, iar elementul minim este −2 și se află pe linia 2 coloana 2. Se remarcă faptul că, deși există mai multe elemente maxime sau minime, este reținut primul întâlnit.</p>`, check: [{ var: 'lmax', expected: '1' }, { var: 'cmax', expected: '3' }, { var: 'lmin', expected: '2' }, { var: 'cmin', expected: '2' }] },
+    { title: 'Răcirea sticlei cu bere', statement: `<p>7. Problema răcirii sticlei cu bere. Temperatura de afară și din nefericire și a berii este de 30<sup>o</sup>&nbsp;C. Există un frigider care în interior are temperatura de 10<sup>o</sup>&nbsp;C. Punem bineînțeles sticla în frigider. După câte minute ajunge la temperatura de 14<sup>o</sup>&nbsp;C ca să o putem răcori cu ea?</p>`, hint: '<p>Să notăm cu T<sub>f</sub> temperatura din frigider. Dacă la momentul t<sub>i</sub> temperatura berii este T<sub>i</sub>, atunci temperatura T<sub>i+1</sub> de la momentul t<sub>i+1</sub> este dată de:</p><p>T<sub>i+1</sub> = T<sub>i</sub> + K·(t<sub>i+1</sub> − t<sub>i</sub>)·(T<sub>f</sub> − T<sub>i</sub>)</p><p>unde K este coeficientul de conducție al căldurii comun pentru ansamblul bere-sticlă. Unitatea de măsură a timpului este minutul și măsurătorile se fac din minut în minut, deci t<sub>i+1</sub> − t<sub>i</sub> = 1. Vom presupune K=0.05. Notații: k=0.05 – constanta de conducție; tbf=14 – temperatura berii finală; tb – temperatura berii calculată în minutul t; tbn – temperatura berii calculată în minutul t+1; t – minutul curent, în final răspunsul dorit.</p>', solution: `${ml(`>> k=0.05;
+>> tbf=14;
+>> tb=30;
+>> t=1;
+>> tf=10;
 >> while tb > tbf
 ..     tbn=tb+k*(tf-tb);
 ..     tb=tbn;
 ..     t=t+1;
 .. end
->> t`)}<p>După 33 de minute. Cam durează, și dacă afară e 30 °C o să ni se pară o veșnicie!</p>`, check: [{ var: 't', expected: '33' }] },
+>> t`)}<p>Deci după 33 de minute putem scoate berea din frigider la temperatura de 14<sup>o</sup>&nbsp;C. Cam durează și dacă afară e 30<sup>o</sup>&nbsp;C o să ni se pară o veșnicie!!</p>`, check: [{ var: 't', expected: '33' }] },
   ],
 });
