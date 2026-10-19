@@ -299,3 +299,14 @@ p { margin: 0.6rem 0; }
   .flashcard { height: 320px; }
   .question { padding: 18px 16px; }
 }
+
+/* matrici și sisteme în enunțuri */
+.mat { display: inline-block; position: relative; vertical-align: middle; padding: 2px 8px; margin: 2px 2px; }
+.mat::before, .mat::after { content: ''; position: absolute; top: 0; bottom: 0; width: 5px; border: 1.5px solid currentColor; }
+.mat::before { left: 0; border-right: none; }
+.mat::after { right: 0; border-left: none; }
+.mat-in { display: inline-grid; column-gap: 0.9em; row-gap: 0.1em; font-family: var(--mono); font-size: 0.92em; }
+.mat-in > span { text-align: right; }
+.eqm { display: inline-flex; align-items: center; gap: 0.35em; white-space: nowrap; }
+.mats { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.8rem; margin: 0.6rem 0 0.9rem; overflow-x: auto; }
+.sys { display: inline-flex; flex-direction: column; vertical-align: middle; border-left: 2px solid currentColor; border-radius: 10px 0 0 10px; padding: 2px 0 2px 10px; margin: 4px 0; line-height: 1.6; }

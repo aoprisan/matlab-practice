@@ -79,7 +79,7 @@ x =
     { type: 'mc', q: 'Ce dă ' + c('factor(det(B))') + ' pentru B de mai sus (din soluțiile lucrării)?', options: ['(a+5b)·(a−b)⁵, deci det ≠ 0 pentru a ≠ b și a ≠ −5b', 'a⁶ − b⁶', '(a−b)⁶', '6ab'], answer: 0, explain: 'Condițiile ca determinantul să fie nenul rezultă direct din factorizare.' },
   ],
   exercises: [
-    { title: 'Polinoame de matrici și inverse simbolice', statement: `<p>a) Pentru P[X] = X² − (a+d)X + (ad−bc)·I₂ calculează P[A] cu A = [a b; c d]. Analog R[B] = B² − 2(a+2b)B + (a−b)(a+5b)·I₆ pentru B, matricea 6×6 cu a pe diagonală și b în rest. b) Inversele matricilor C (4×4, 1 pe diagonală, −a deasupra) și D (6×6, 1 pe diagonală, −a pe a doua diagonală de sub ea, D(1,6) = b).</p>`, solution: `${mls(`>> syms a b c d
+    { title: 'Polinoame de matrici și inverse simbolice', statement: `${mats(eqm('A', 'a b;c d'), eqm('B', 'a b b b b b;b a b b b b;b b a b b b;b b b a b b;b b b b a b;b b b b b a'))}${mats(eqm('C', '1 −a 0 0;0 1 −a 0;0 0 1 −a;0 0 0 1'), eqm('D', '1 0 0 0 0 b;0 1 0 0 0 0;−a 0 1 0 0 0;0 −a 0 1 0 0;0 0 −a 0 1 0;0 0 0 −a 0 1'))}<p>a) Pentru P[X] = X² − (a+d)X + (ad−bc)·I₂ calculează P[A]. Analog R[B] = B² − 2(a+2b)B + (a−b)(a+5b)·I₆. b) Calculează inversele matricilor C și D.</p>`, solution: `${mls(`>> syms a b c d
 >> A=[a b;c d]
 >> collect(A^2-(a+d)*A+(a*d-b*c)*eye(2))
 >> B=b*ones(6)+(a-b)*diag(ones(1,6))
@@ -91,7 +91,7 @@ x =
     { title: 'Determinanți', statement: `<p>a) Arată că determinanții matricilor C și D sunt egali. b) Scrie sub formă de produs determinantul lui B și deduce condițiile ca acesta să fie nenul.</p>`, solution: `${mls(`>> det(C)
 >> det(D)
 >> factor(det(B))`)}<p>a) Ambii sunt 1. b) (a+5b)·(a−b)⁵, deci a ≠ b și a ≠ −5b.</p>` },
-    { title: 'Sisteme nedeterminate', statement: `<p>Rezolvă: a) x + y + t − u = 1; x + z + 2t + u = 2; x − t + u = 0. b) sistemul cu 5 necunoscute din Lucrarea 3 (varianta c). c) 3x + y − 2z + 4t − u = 10; 2x + 3y − z + t + 4u = 20; x − 4y + 6z − 2t − u = −2; −3x − 3y + 9z − 9t + 5u = 7; 4x − 18y + 31z − 13t = 9.</p>`, hint: '<p>a) principale x, y, z; secundare t, u. b) principale x1..x4, secundară x5. c) rangul este 3: principale x, y, z; secundare t, u. Verifică rangul înainte, numeric, în consolă.</p>', solution: `${ml(`>> A=[1 1 0;1 0 1;1 0 0]; rank(A)
+    { title: 'Sisteme nedeterminate', statement: `<p>Rezolvă:</p><p>a) ${sys(['x + y + t − u = 1', 'x + z + 2t + u = 2', 'x − t + u = 0'])}</p><p>b) sistemul cu 5 necunoscute din Lucrarea 3 (varianta c).</p><p>c) ${sys(['3x + y − 2z + 4t − u = 10', '2x + 3y − z + t + 4u = 20', 'x − 4y + 6z − 2t − u = −2', '−3x − 3y + 9z − 9t + 5u = 7', '4x − 18y + 31z − 13t = 9'])}</p>`, hint: '<p>a) principale x, y, z; secundare t, u. b) principale x1..x4, secundară x5. c) rangul este 3: principale x, y, z; secundare t, u. Verifică rangul înainte, numeric, în consolă.</p>', solution: `${ml(`>> A=[1 1 0;1 0 1;1 0 0]; rank(A)
 >> A=[1 -1 2 3;2 -2 1 0;-3 1 -2 -2;-1 2 -2 3]; rank(A)
 >> A=[3 1 -2 4 -1;2 3 -1 1 4;1 -4 6 -2 -1;-3 -3 9 -9 5;4 -18 31 -13 0]; rank(A)`)}${mls(`>> syms t u
 >> A=[1 1 0;1 0 1;1 0 0]; B=[1-t+u;2-2*t-u;t-u]; x=A\\B

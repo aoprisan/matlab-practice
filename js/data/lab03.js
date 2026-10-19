@@ -90,17 +90,17 @@ LABS.push({
     { type: 'fill', q: 'Ce funcție dă numărul de condiție al unei matrici?', answers: ['cond', 'cond(A)'], explain: '<code>cond(A)</code> intră în formula preciziei soluției.' },
   ],
   exercises: [
-    { title: 'Ecuații cu matrici bandă 7×7', statement: `<p>A are 1 pe diagonala principală și pe primele două diagonale de deasupra. B are 1 sub diagonală, 3 pe diagonală, 4, 3, 1 pe primele trei diagonale de deasupra, cu B(7,7) = 2. C are 1 sub diagonală, 2 pe diagonală, 3, 2, 1 deasupra, cu C(1,1) = 1 și C(1,2) = 2. Rezolvă A·X = B și Y·A = C.</p>`, hint: '<p>Construiește matricile cu ' + c('diag') + ', corectează elementele izolate prin atribuire directă, apoi ' + c('X=A\\B') + ', ' + c('Y=C/A') + '.</p>', solution: `${ml(`>> A=diag(ones(1,7))+diag(ones(1,6),1)+diag(ones(1,5),2);
+    { title: 'Ecuații cu matrici bandă 7×7', statement: `<p>Rezolvă ecuațiile matriciale A·X = B și Y·A = C, unde:</p>${mats(eqm('A', '1 1 1 0 0 0 0;0 1 1 1 0 0 0;0 0 1 1 1 0 0;0 0 0 1 1 1 0;0 0 0 0 1 1 1;0 0 0 0 0 1 1;0 0 0 0 0 0 1'))}${mats(eqm('B', '3 4 3 1 0 0 0;1 3 4 3 1 0 0;0 1 3 4 3 1 0;0 0 1 3 4 3 1;0 0 0 1 3 4 3;0 0 0 0 1 3 4;0 0 0 0 0 1 2'), eqm('C', '1 2 2 1 0 0 0;1 2 3 2 1 0 0;0 1 2 3 2 1 0;0 0 1 2 3 2 1;0 0 0 1 2 3 2;0 0 0 0 1 2 3;0 0 0 0 0 1 2'))}`, hint: '<p>Construiește matricile cu ' + c('diag') + ', corectează elementele izolate prin atribuire directă, apoi ' + c('X=A\\B') + ', ' + c('Y=C/A') + '.</p>', solution: `${ml(`>> A=diag(ones(1,7))+diag(ones(1,6),1)+diag(ones(1,5),2);
 >> B=diag(ones(1,6),-1)+3*diag(ones(1,7))+4*diag(ones(1,6),1)+3*diag(ones(1,5),2)+diag(ones(1,4),3); B(7,7)=2;
 >> C=diag(ones(1,6),-1)+2*diag(ones(1,7))+3*diag(ones(1,6),1)+2*diag(ones(1,5),2)+diag(ones(1,4),3); C(1,1)=1; C(1,2)=2;
 >> X=A\\B
 >> Y=C/A`)}<p>X este tridiagonală (1 2 1) cu o ultimă coloană specială; Y este bidiagonală cu 1 pe diagonală și pe cea de sub ea.</p>` },
-    { title: 'Ecuații matriciale 2×2', statement: `<p>A = [5 3; 3 2], B = [6 2; 2 4], C = [4 −2; −6 3]. Rezolvă: a) A·X + B = C; b) A·X + B = X; c) X·A + B = C; d) X·A + B = X.</p>`, solution: `${ml(`>> A=[5 3;3 2]; B=[6 2;2 4]; C=[4 -2;-6 3];
+    { title: 'Ecuații matriciale 2×2', statement: `${mats(eqm('A', '5 3;3 2'), eqm('B', '6 2;2 4'), eqm('C', '4 -2;-6 3'))}<p>Rezolvă: a) A·X + B = C; b) A·X + B = X; c) X·A + B = C; d) X·A + B = X.</p>`, solution: `${ml(`>> A=[5 3;3 2]; B=[6 2;2 4]; C=[4 -2;-6 3];
 >> X=A\\(C-B)
 >> X=(A-eye(2))\\(-B)
 >> X=(C-B)/A
 >> X=(-B)/(A-eye(2))`)}<p>a) [20 −5; −34 7]; b) [0 −2; −2 2]; c) [8 −14; −13 19]; d) [0 −2; −2 2].</p>`, starter: 'A=[5 3;3 2]; B=[6 2;2 4]; C=[4 -2;-6 3];' },
-    { title: 'Sisteme liniare și precizia', statement: `<p>Rezolvă, indicând tipul sistemului și numărul de cifre exacte:</p><p>a) x<sub>1</sub>+x<sub>2</sub>+x<sub>3</sub>+x<sub>4</sub>=0; 2x<sub>1</sub>−x<sub>2</sub>−x<sub>3</sub>−2x<sub>4</sub>=1; −x<sub>1</sub>+3x<sub>2</sub>+2x<sub>3</sub>+3x<sub>4</sub>=−1; x<sub>1</sub>−2x<sub>2</sub>+x<sub>3</sub>−2x<sub>4</sub>=−6.</p><p>b) și c) sistemul cu 5 necunoscute din manual, cu ultimul termen liber −2, respectiv 3.</p><p>d) sistemul tridiagonal de ordin 99: 2x<sub>1</sub>+x<sub>2</sub>=2, x<sub>i−1</sub>+2x<sub>i</sub>+x<sub>i+1</sub>=2, x<sub>98</sub>+2x<sub>99</sub>=2.</p>`, hint: '<p>Compară ' + c('rank(A)') + ' cu ' + c('rank([A b])') + ' și cu numărul necunoscutelor. Precizia: ' + c('2.2e-15*cond(A)') + '.</p>', solution: `${ml(`>> A=[1 1 1 1;2 -1 -1 -2;-1 3 2 3;1 -2 1 -2]; b=[0;1;-1;-6];
+    { title: 'Sisteme liniare și precizia', statement: `<p>Rezolvă, indicând tipul sistemului și numărul de cifre exacte:</p><p>a) ${sys(['x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub> + x<sub>4</sub> = 0', '2x<sub>1</sub> − x<sub>2</sub> − x<sub>3</sub> − 2x<sub>4</sub> = 1', '−x<sub>1</sub> + 3x<sub>2</sub> + 2x<sub>3</sub> + 3x<sub>4</sub> = −1', 'x<sub>1</sub> − 2x<sub>2</sub> + x<sub>3</sub> − 2x<sub>4</sub> = −6'])}</p><p>b) și c) sistemul cu 5 necunoscute din manual, cu ultimul termen liber −2, respectiv 3.</p><p>d) sistemul tridiagonal de ordin 99: ${sys(['2x<sub>1</sub> + x<sub>2</sub> = 2', 'x<sub>1</sub> + 2x<sub>2</sub> + x<sub>3</sub> = 2', 'x<sub>2</sub> + 2x<sub>3</sub> + x<sub>4</sub> = 2', '⋯', 'x<sub>97</sub> + 2x<sub>98</sub> + x<sub>99</sub> = 2', 'x<sub>98</sub> + 2x<sub>99</sub> = 2'])}</p>`, hint: '<p>Compară ' + c('rank(A)') + ' cu ' + c('rank([A b])') + ' și cu numărul necunoscutelor. Precizia: ' + c('2.2e-15*cond(A)') + '.</p>', solution: `${ml(`>> A=[1 1 1 1;2 -1 -1 -2;-1 3 2 3;1 -2 1 -2]; b=[0;1;-1;-6];
 >> rank(A), rank([A b])
 >> 2.2e-15*cond(A)
 >> x=A\\b
@@ -109,7 +109,7 @@ LABS.push({
 >> 2.2e-15*cond(A)
 >> x=A\\b;
 >> x(1:6)'`)}<p>a) rank(A) = rank(Aext) = 4: compatibil determinat, precizie ≈ 3.7·10<sup>−14</sup> (cel puțin 14 cifre), x = (1, 0, −3, 2). b) rank(A) ≠ rank(Aext): incompatibil. c) rank(A) = rank(Aext) = 3 &lt; 4: compatibil nedeterminat. d) rank = 99: compatibil determinat, precizie ≈ 8.9·10<sup>−12</sup>; soluția este x<sub>i</sub> = 0 pentru i par și 1 pentru i impar.</p>` },
-    { title: 'Valori și vectori proprii', statement: `<p>Pentru A = [7 8 2; −5 −6 −2; −1 −1 1] și B = [3 7 0 −6; −2 0 0 0; 6 12 −1 −9; −2 2 0 −2] determină valorile proprii și vectorii proprii. Dacă L are valorile proprii pe diagonală și V vectorii proprii pe coloane, calculează V·L·inv(V). Ce observi?</p>`, solution: `${ml(`>> A=[7 8 2;-5 -6 -2;-1 -1 1];
+    { title: 'Valori și vectori proprii', statement: `${mats(eqm('A', '7 8 2;-5 -6 -2;-1 -1 1'), eqm('B', '3 7 0 -6;-2 0 0 0;6 12 -1 -9;-2 2 0 -2'))}<p>Pentru A și B determină valorile proprii și vectorii proprii. Dacă L are valorile proprii pe diagonală și V vectorii proprii pe coloane, calculează V·L·inv(V). Ce observi?</p>`, solution: `${ml(`>> A=[7 8 2;-5 -6 -2;-1 -1 1];
 >> [V,L]=eig(A)
 >> V*L*inv(V)
 >> B=[3 7 0 -6;-2 0 0 0;6 12 -1 -9;-2 2 0 -2];

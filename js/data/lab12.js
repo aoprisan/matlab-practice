@@ -154,7 +154,7 @@ Surf(x,y,z)`)}`, hint: '<p>Caută: virgula zecimală, paranteza neînchisă, par
 >> xy=x.*y; xy=xy+(xy==0)*eps;
 >> z=(x.^2+y.^2)./xy;
 >> size(z)`)}<p>În MATLAB urmează ${c('surf(x,y,z)')}.</p>` },
-    { title: 'Matricea alab: a<sub>i</sub> la puterea b<sub>j</sub>', statement: `<p>Determină matricea alab cu elementele obținute ridicând fiecare element al lui a la puterea fiecărui element al lui b. Pentru a = [1, 2], b = [2, 3]: alab = [1 4; 1 8]. Compară varianta cu bucle (alab1) cu cea vectorizată (alab2) pentru a = 1:10000, b = 1:20.</p>`, solution: `${ml(`>> a=1:2000; b=1:20;
+    { title: 'Matricea alab: a<sub>i</sub> la puterea b<sub>j</sub>', statement: `<p>Determină matricea alab cu elementele obținute ridicând fiecare element al lui a la puterea fiecărui element al lui b. Pentru a = [1, 2], b = [2, 3]: ${eqm('alab', '1 4;1 8')}. Compară varianta cu bucle (alab1) cu cea vectorizată (alab2) pentru a = 1:10000, b = 1:20.</p>`, solution: `${ml(`>> a=1:2000; b=1:20;
 >> tic; alab=zeros(length(b),length(a)); for i=1:length(b), for j=1:length(a), alab(i,j)=a(j)^b(i); end, end, toc
 >> tic; [A,B]=meshgrid(a,b); alab=A.^B; toc
 >> a=[1,2]; b=[2,3]; [A,B]=meshgrid(a,b); alab=A.^B`)}<p>Manualul: alab1 (bucle) 2.516 s, alab2 (vectorizat) 0.250 s.</p>`, check: [{ var: 'alab', expected: '[1 4;1 8]' }] },
