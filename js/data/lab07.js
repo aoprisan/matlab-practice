@@ -79,23 +79,72 @@ x =
     { type: 'mc', q: 'Ce dă ' + c('factor(det(B))') + ' pentru B de mai sus (din soluțiile lucrării)?', options: ['(a+5b)·(a−b)⁵, deci det ≠ 0 pentru a ≠ b și a ≠ −5b', 'a⁶ − b⁶', '(a−b)⁶', '6ab'], answer: 0, explain: 'Condițiile ca determinantul să fie nenul rezultă direct din factorizare.' },
   ],
   exercises: [
-    { title: 'Polinoame de matrici și inverse simbolice', statement: `${mats(eqm('A', 'a b;c d'), eqm('B', 'a b b b b b;b a b b b b;b b a b b b;b b b a b b;b b b b a b;b b b b b a'))}${mats(eqm('C', '1 −a 0 0;0 1 −a 0;0 0 1 −a;0 0 0 1'), eqm('D', '1 0 0 0 0 b;0 1 0 0 0 0;−a 0 1 0 0 0;0 −a 0 1 0 0;0 0 −a 0 1 0;0 0 0 −a 0 1'))}<p>a) Pentru P[X] = X² − (a+d)X + (ad−bc)·I₂ calculează P[A]. Analog R[B] = B² − 2(a+2b)B + (a−b)(a+5b)·I₆. b) Calculează inversele matricilor C și D.</p>`, solution: `${mls(`>> syms a b c d
+    { title: 'Polinoame de matrici și inverse simbolice', statement: `
+      <p>a) Fie polinomul P[X] = X<sup>2</sup> − (a + d)·X + (a·d − b·c)·I<sub>2</sub> unde X este o matrice pătrată de ordinul 2, iar ${eqm('I<sub>2</sub>', '1 0;0 1')}. Să se calculeze P[A], unde ${eqm('A', 'a b;c d')}. Analog să se calculeze R[B] pentru polinomul R[X], și matricea B date de:</p>
+      <p>R[X] = X<sup>2</sup> − 2·(a + 2·b)·X + (a − b)·(a + 5·b)·I<sub>6</sub></p>
+      ${mats(eqm('B', 'a b b b b b;b a b b b b;b b a b b b;b b b a b b;b b b b a b;b b b b b a'))}
+      <p>b) Să se calculeze inversele matricilor:</p>
+      ${mats(eqm('C', '1 -a 0 0;0 1 -a 0;0 0 1 -a;0 0 0 1') + ' ;', eqm('D', '1 0 0 0 0 b;0 1 0 0 0 0;-a 0 1 0 0 0;0 -a 0 1 0 0;0 0 -a 0 1 0;0 0 0 -a 0 1'))}`,
+      solution: `<p><b>Indicații</b></p>
+      <p>a)</p>
+      ${mls(`>> syms a b c d
 >> A=[a b;c d]
 >> collect(A^2-(a+d)*A+(a*d-b*c)*eye(2))
+>> syms a b
 >> B=b*ones(6)+(a-b)*diag(ones(1,6))
->> expand(B^2-2*(a+2*b)*B+(a-b)*(a+5*b)*eye(6))
->> C=diag(ones(1,4))-a*diag(ones(1,3),1)
+>> expand(B^2-2*(a+2*b)*B+(a-b)*(a+5*b)*eye(6))`)}
+      <p>b)</p>
+      ${mls(`>> C=diag(ones(1,4))-a*diag(ones(1,3),1)
 >> inv(C)
->> D=-a*diag(ones(1,4),-2)+diag(ones(1,6)); D(1,6)=b
->> inv(D)`)}<p>a) Ambele polinoame dau matricea nulă (teorema Cayley–Hamilton). b) inv(C) este triunghiulară superioară cu 1, a, a², a³ pe diagonale.</p>` },
-    { title: 'Determinanți', statement: `<p>a) Arată că determinanții matricilor C și D sunt egali. b) Scrie sub formă de produs determinantul lui B și deduce condițiile ca acesta să fie nenul.</p>`, solution: `${mls(`>> det(C)
->> det(D)
->> factor(det(B))`)}<p>a) Ambii sunt 1. b) (a+5b)·(a−b)⁵, deci a ≠ b și a ≠ −5b.</p>` },
-    { title: 'Sisteme nedeterminate', statement: `<p>Rezolvă:</p><p>a) ${sys(['x + y + t − u = 1', 'x + z + 2t + u = 2', 'x − t + u = 0'])}</p><p>b) sistemul cu 5 necunoscute din Lucrarea 3 (varianta c).</p><p>c) ${sys(['3x + y − 2z + 4t − u = 10', '2x + 3y − z + t + 4u = 20', 'x − 4y + 6z − 2t − u = −2', '−3x − 3y + 9z − 9t + 5u = 7', '4x − 18y + 31z − 13t = 9'])}</p>`, hint: '<p>a) principale x, y, z; secundare t, u. b) principale x1..x4, secundară x5. c) rangul este 3: principale x, y, z; secundare t, u. Verifică rangul înainte, numeric, în consolă.</p>', solution: `${ml(`>> A=[1 1 0;1 0 1;1 0 0]; rank(A)
->> A=[1 -1 2 3;2 -2 1 0;-3 1 -2 -2;-1 2 -2 3]; rank(A)
->> A=[3 1 -2 4 -1;2 3 -1 1 4;1 -4 6 -2 -1;-3 -3 9 -9 5;4 -18 31 -13 0]; rank(A)`)}${mls(`>> syms t u
->> A=[1 1 0;1 0 1;1 0 0]; B=[1-t+u;2-2*t-u;t-u]; x=A\\B
->> A=[1 -1 2 3;2 -2 1 0;-3 1 -2 -2;-1 2 -2 3]; B=[2-5*t;4*t;1;3-3*t]; x=A\\B
->> A=[3 1 -2;2 3 -1;1 -4 6]; B=[10-4*t+u;20-t-4*u;-2+2*t+u]; x=A\\B`)}<p>a) x = α−β, y = −2α+2β+1, z = −3α+2, t = α, u = β. b) x1 = −32/33+64/33·α, x2 = −15/11−14/11·α, x3 = −26/33−80/33·α, x4 = 35/33−37/33·α, x5 = α. c) x = −16/17·α+10/3+11/51·β, y = 10/17·α+16/3−94/51·β, z = 15/17·α+8/3−56/51·β, t = α, u = β.</p>` },
+>> D=-a*diag(ones(1,4),-2)+diag(ones(1,6))
+>> D(1,6)=b
+>> inv(D)`)}
+      <p><b>Soluții</b></p>
+      <p>a)</p>
+      ${mats(mat('0 0;0 0') + ' ;', mat('0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0;0 0 0 0 0 0'))}
+      <p>b)</p>
+      ${mats(mat('1 a a<sup>2</sup> a<sup>3</sup>;0 1 a a<sup>2</sup>;0 0 1 a;0 0 0 1') + ' ;', mat('1 −a<sup>2</sup>·b 0 −a·b 0 −b;0 1 0 0 0 0;a −a<sup>3</sup>·b 1 −a<sup>2</sup>·b 0 −a·b;0 a 0 1 0 0;a<sup>2</sup> −a<sup>4</sup>·b a −a<sup>3</sup>·b 1 −a<sup>2</sup>·b;0 a<sup>2</sup> 0 a 0 1'))}` },
+    { title: 'Determinanți', statement: `
+      <p>a) Să se arate că determinanții matricilor C și D definite la punctul 1 b) sunt egali.</p>
+      ${mats(eqm('C', '1 -a 0 0;0 1 -a 0;0 0 1 -a;0 0 0 1') + ' ;', eqm('D', '1 0 0 0 0 b;0 1 0 0 0 0;-a 0 1 0 0 0;0 -a 0 1 0 0;0 0 -a 0 1 0;0 0 0 -a 0 1'))}
+      <p>b) Să se scrie sub formă de produs determinantul matricii B definită la 1a) și să se deducă de aici care sunt condițiile ca determinantul să fie nenul.</p>
+      ${mats(eqm('B', 'a b b b b b;b a b b b b;b b a b b b;b b b a b b;b b b b a b;b b b b b a'))}`,
+      solution: `<p><b>Indicații</b></p>
+      <p>a)</p>
+      ${mls(`>> det(C)
+>> det(D)`)}
+      <p>b)</p>
+      ${mls(`>> factor(det(B))`)}
+      <p><b>Soluții</b></p>
+      <p>a) 1</p>
+      <p>b) (a + 5·b)·(a − b)<sup>5</sup> deci a ≠ b, a ≠ −5·b</p>` },
+    { title: 'Sisteme nedeterminate', statement: `
+      <p>Să se rezolve sistemele nedeterminate:</p>
+      <p>a) ${sys(['x + y + t − u = 1', 'x + z + 2·t + u = 2', 'x − t + u = 0'])} ;</p>
+      <p>b) ${sys(['x<sub>1</sub> − x<sub>2</sub> + 2·x<sub>3</sub> + 3·x<sub>4</sub> + 5·x<sub>5</sub> = 2', '2·x<sub>1</sub> − 2·x<sub>2</sub> + x<sub>3</sub> − 4·x<sub>5</sub> = 0', '−3·x<sub>1</sub> + x<sub>2</sub> − 2·x<sub>3</sub> − 2·x<sub>4</sub> = 1', '−x<sub>1</sub> + 2·x<sub>2</sub> − 2·x<sub>3</sub> + 3·x<sub>4</sub> + 3·x<sub>5</sub> = 3', '−2·x<sub>2</sub> + x<sub>3</sub> + x<sub>4</sub> + x<sub>5</sub> = 3'])} ;</p>
+      <p>c) ${sys(['3·x + y − 2·z + 4·t − u = 10', '2·x + 3·y − z + t + 4·u = 20', 'x − 4·y + 6·z − 2·t − u = −2', '−3·x − 3·y + 9·z − 9·t + 5·u = 7', '4·x − 18·y + 31·z − 13·t = 9'])}</p>`,
+      hint: `<p>a) Necunoscute principale x, y, z și secundare (simboluri) t și u. b) Necunoscute principale x<sub>1</sub>, x<sub>2</sub>, x<sub>3</sub>, x<sub>4</sub> și x<sub>5</sub> secundară. c) Rangul este 3 deci necunoscute principale 3 adică x, y și z, iar secundare t și u. Rangurile se pot verifica numeric în consolă cu ${c('rank')}.</p>`,
+      solution: `<p>Verificarea numerică a rangurilor (se poate rula):</p>
+      ${ml(`>> A=[1 1 0 1 -1;1 0 1 2 1;1 0 0 -1 1]; rank(A)
+>> A=[1 -1 2 3 5;2 -2 1 0 -4;-3 1 -2 -2 0;-1 2 -2 3 3;0 -2 1 1 1]; rank(A)
+>> A=[3 1 -2 4 -1;2 3 -1 1 4;1 -4 6 -2 -1;-3 -3 9 -9 5;4 -18 31 -13 0]; rank(A)`)}
+      <p><b>Indicații</b></p>
+      <p>a) Necunoscute principale x y z și secundare (simboluri) t și u</p>
+      ${mls(`>> syms t u
+>> A=[1 1 0;1 0 1;1 0 0]
+>> B=[1-t+u;2-2*t-u;t-u]
+>> x=A\\B`)}
+      <p>b) Necunoscute principale x<sub>1</sub>, x<sub>2</sub>, x<sub>3</sub>, x<sub>4</sub> și x<sub>5</sub> secundară</p>
+      ${mls(`>> A=[1 -1 2 3;2 -2 1 0;-3 1 -2 -2;-1 2 -2 3]
+>> B=[2-5*t;4*t;1;3-3*t]
+>> x=A\\B`)}
+      <p>c) Rangul este 3 deci necunoscute principale 3 adică x, y și z, iar secundare t și u.</p>
+      ${mls(`>> A=[3 1 -2;2 3 -1;1 -4 6]
+>> B=[10-4*t+u;20-t-4*u;-2+2*t+u]
+>> x=A\\B`)}
+      <p><b>Soluții</b></p>
+      <p>a) ${sys(['x = α − β', 'y = −2·α + 2·β + 1', 'z = −3·α + 2', 't = α', 'u = β'])} ; α, β ∈ R</p>
+      <p>b) ${sys(['x<sub>1</sub> = −' + frac('32', '33') + ' + ' + frac('64', '33') + '·α', 'x<sub>2</sub> = −' + frac('15', '11') + ' − ' + frac('14', '11') + '·α', 'x<sub>3</sub> = −' + frac('26', '33') + ' − ' + frac('80', '33') + '·α', 'x<sub>4</sub> = ' + frac('35', '33') + ' − ' + frac('37', '33') + '·α', 'x<sub>5</sub> = α'])} ; α ∈ R</p>
+      <p>c) ${sys(['x = −16/17·α + 10/3 + 11/51·β', 'y = 10/17·α + 16/3 − 94/51·β', 'z = 15/17·α + 8/3 − 56/51·β', 't = α', 'u = β'])} ; α, β ∈ R</p>` },
   ],
 });

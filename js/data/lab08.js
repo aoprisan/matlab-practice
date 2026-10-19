@@ -117,30 +117,98 @@ ans =
     { type: 'mc', q: 'Ce dă ' + c("limit(((x-1)/(x+1))^x,x,inf,'left')") + '?', options: [c('exp(-2)'), c('1'), c('0'), c('exp(2)')], answer: 0, explain: '((x−1)/(x+1))^x = (1 − 2/(x+1))^x → e⁻².' },
     { type: 'mc', q: 'Ce dă ' + c('solve(x^3+2*a*x^2-a^2*x-2*a^3)') + '?', options: [c('-a, a, -2*a'), c('a, 2a, 3a'), c('0, a, -a'), c('a^2, -a^2')], answer: 0, explain: 'x³ + 2ax² − a²x − 2a³ = (x−a)(x+a)(x+2a).' },
   ],
-  exercises: [
-    { title: 'Limite în puncte finite', statement: `<p>a) lim<sub>x→−1</sub> (x³+1)/(x²+1); b) lim<sub>x→0</sub> (√(x+1) − 1)/(∛(x+1) − 1); c) lim<sub>x→0</sub> (1 − cos x)/x²; d) lim<sub>x→0</sub> ln(1+x)/x.</p>`, solution: `${mls(`>> syms x
->> limit((x^3+1)/(x^2+1),-1)
+  exercises: (() => {
+    /* lim cu indicele dedesubt și radical cu bară deasupra, doar pentru enunțurile de mai jos */
+    const lim = s => '<span style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;margin-right:3px">lim<span style="font-size:0.75em">' + s + '</span></span>';
+    const sq = (s, n) => (n ? '<sup style="margin-right:-0.35em">' + n + '</sup>' : '') + '√<span style="text-decoration:overline">' + s + '</span>';
+    const syms = '>> syms x y t a b h\n';
+    return [
+    { title: 'Limite în puncte finite', statement: `
+      <p>Să se calculeze limitele:</p>
+      <p>a) ${lim('x→−1')} ${frac('x<sup>3</sup> + 1', 'x<sup>2</sup> + 1')} ; b) ${lim('x→0')} ${frac(sq('x + 1') + ' − 1', sq('x + 1', 3) + ' − 1')} ; c) ${lim('x→0')} ${frac('1 − cos x', 'x<sup>2</sup>')} ; d) ${lim('x→0')} ${frac('ln(1 + x)', 'x')} .</p>`,
+      solution: `<p><b>Indicații</b></p>
+      ${mls(syms + `>> limit((x^3+1)/(x^2+1),-1)
 >> limit((sqrt(x+1)-1)/((x+1)^(1/3)-1))
 >> limit((1-cos(x))/x^2)
->> limit(log(1+x)/x)`)}<p>a) 0; b) 3/2; c) 1/2; d) 1.</p>` },
-    { title: 'Limite la infinit', statement: `<p>a) lim<sub>x→+∞</sub> (√(x+a) − √x); b) lim<sub>x→−∞</sub> (x³−1)/(x³+1); c) lim<sub>x→∞</sub> ((x−1)/(x+1))<sup>x</sup>; d) lim<sub>x→∞</sub> ln(1+e<sup>x</sup>)/x.</p>`, solution: `${mls(`>> limit(sqrt(x+a)-sqrt(x),x,inf,'left')
+>> limit(log(1+x)/x)`)}
+      <p><b>Soluții</b></p>
+      <p>a) 0; b) ${frac('3', '2')}; c) ${frac('1', '2')}; d) 1</p>` },
+    { title: 'Limite la infinit', statement: `
+      <p>Să se calculeze limitele:</p>
+      <p>a) ${lim('x→+∞')} (${sq('x + a')} − ${sq('x')}) ; b) ${lim('x→−∞')} ${frac('x<sup>3</sup> − 1', 'x<sup>3</sup> + 1')} ; c) ${lim('x→∞')} (${frac('x − 1', 'x + 1')})<sup>x</sup> ;</p>
+      <p>d) ${lim('x→∞')} ${frac('ln(1 + e<sup>x</sup>)', 'x')} .</p>`,
+      solution: `<p><b>Indicații</b></p>
+      ${mls(syms + `>> limit(sqrt(x+a)-sqrt(x),x,inf,'left')
 >> limit((x^3-1)/(x^3+1),x,-inf,'right')
 >> limit(((x-1)/(x+1))^x,x,inf,'left')
->> limit(log(1+exp(x))/x,x,inf,'left')`)}<p>a) 0; b) 1; c) e<sup>−2</sup>; d) 1.</p>` },
-    { title: 'Derivate', statement: `<p>a) f′ pentru f = 2x·sin x − (x²−2)cos x; b) f″ pentru f = e<sup>x</sup>·arcsin x; c) f‴ pentru f = x⁵/e<sup>x</sup>; d) ∂²f/∂x∂y pentru f = 3x³ sin x + y·e<sup>xy</sup>.</p>`, solution: `${mls(`>> diff(2*x*sin(x)-(x^2-2)*cos(x))
+>> limit(log(1+exp(x))/x,x,inf,'left')`)}
+      <p><b>Soluții</b></p>
+      <p>a) 0; b) 1; c) e<sup>−2</sup>; d) 1</p>` },
+    { title: 'Derivate', statement: `
+      <p>Să se calculeze:</p>
+      <p>a) f′(x) dacă f(x) = 2·x·sin x − (x<sup>2</sup> − 2)·cos(x) ;</p>
+      <p>b) f″(x) dacă f(x) = e<sup>x</sup>·arcsin x ;</p>
+      <p>c) f‴(x) dacă f(x) = ${frac('x<sup>5</sup>', 'e<sup>x</sup>')} .</p>
+      <p>d) ${frac('∂<sup>2</sup>f', '∂x∂y')} dacă f(x, y) = 3·x<sup>3</sup>·sin x + y·e<sup>x·y</sup></p>`,
+      solution: `<p><b>Indicații</b></p>
+      ${mls(syms + `>> diff(2*x*sin(x)-(x^2-2)*cos(x))
 >> diff(exp(x)*asin(x),2)
 >> diff(x^5/exp(x),3)
->> diff(diff(3*x^3*sin(x)+y*exp(x*y)),'y')`)}<p>a) 2*sin(x)+(x^2-2)*sin(x); b) exp(x)*asin(x)+2*exp(x)/(1-x^2)^(1/2)+exp(x)/(1-x^2)^(3/2)*x; c) 60*x^2/exp(x)-60*x^3/exp(x)+15*x^4/exp(x)-x^5/exp(x); d) 2*y*exp(x*y)+y^2*x*exp(x*y).</p>` },
-    { title: 'Primitive', statement: `<p>a) x²·e<sup>x³</sup>; b) e<sup>ax</sup> sin(bx); c) x²/(x² − 6x + 10); d) x²/(x−1)<sup>10</sup>.</p>`, solution: `${mls(`>> int(x^2*exp(x^3))
+>> diff(diff(3*x^3*sin(x)+y*exp(x*y)),'y')`)}
+      <p><b>Soluții</b></p>
+      ${mls(`a) 2*sin(x)+(x^2-2)*sin(x)
+b) exp(x)*asin(x)+2*exp(x)/(1-x^2)^(1/2)+exp(x)/(1-x^2)^(3/2)*x
+c) 60*x^2/exp(x)-60*x^3/exp(x)+15*x^4/exp(x)-x^5/exp(x)
+d) 2*y*exp(x*y)+y^2*x*exp(x*y)`)}` },
+    { title: 'Primitive', statement: `
+      <p>Să se calculeze primitivele funcțiilor:</p>
+      <p>a) f(x) = x<sup>2</sup>·e<sup>x<sup>3</sup></sup> ; b) f(x) = e<sup>a·x</sup>·sin(b·x) ; c) f(x) = ${frac('x<sup>2</sup>', 'x<sup>2</sup> − 6·x + 10')} ;</p>
+      <p>d) f(x) = ${frac('x<sup>2</sup>', '(x − 1)<sup>10</sup>')} .</p>`,
+      solution: `<p><b>Indicații</b></p>
+      ${mls(syms + `>> int(x^2*exp(x^3))
 >> int(exp(a*x)*sin(b*x))
 >> int(x^2/(x^2-6*x+10))
->> int(x^2/(x-1)^10)`)}<p>a) 1/3*exp(x^3); b) -b/(a^2+b^2)*exp(a*x)*cos(b*x)+a/(a^2+b^2)*exp(a*x)*sin(b*x); c) x+3*log(x^2-6*x+10)+8*atan(x-3); d) -1/4/(x-1)^8-1/9/(x-1)^9-1/7/(x-1)^7.</p>` },
-    { title: 'Ecuații simbolice', statement: `<p>a) x³ + 2ax² − a²x − 2a³ = 0; b) x⁴ − 6ax² + 8a√a·x − 3a² = 0; c) polinomul de gradul 4 în x din Lucrarea 6 (cu coeficienți în a, b) = 0.</p>`, solution: `${mls(`>> solve(x^3+2*a*x^2-a^2*x-2*a^3)
+>> int(x^2/(x-1)^10)`)}
+      <p><b>Soluții</b></p>
+      ${mls(`a) 1/3*exp(x^3)
+b) -b/(a^2+b^2)*exp(a*x)*cos(b*x)+a/(a^2+b^2)*exp(a*x)*sin(b*x)
+c) x+3*log(x^2-6*x+10)+8*atan(x-3)
+d) -1/4/(x-1)^8-1/9/(x-1)^9-1/7/(x-1)^7`)}` },
+    { title: 'Ecuații simbolice', statement: `
+      <p>Să se rezolve ecuațiile:</p>
+      <p>a) x<sup>3</sup> + 2·a·x<sup>2</sup> − a<sup>2</sup>·x − 2·a<sup>3</sup> = 0</p>
+      <p>b) x<sup>4</sup> − 6·a·x<sup>2</sup> + 8·a·${sq('a')}·x − 3·a<sup>2</sup> = 0</p>
+      <p>c) (a<sup>2</sup> + b<sup>2</sup>)·x<sup>4</sup> + (−a<sup>3</sup> − a·b<sup>2</sup> + a<sup>2</sup> + b<sup>2</sup> − a·b)·x<sup>3</sup> +<br>
+      &emsp;+ (−a<sup>3</sup> − a·b<sup>2</sup> + a<sup>2</sup>·b − 2·a<sup>2</sup> − 2·b<sup>2</sup> − a·b)·x<sup>2</sup> +<br>
+      &emsp;+ (2·a<sup>3</sup> + 2·a·b<sup>2</sup> + a<sup>2</sup>·b + 2·a·b)·x − 2·a<sup>2</sup>·b = 0</p>`,
+      solution: `<p><b>Indicații</b></p>
+      ${mls(syms + `>> solve(x^3+2*a*x^2-a^2*x-2*a^3)
 >> solve(x^4-6*a*x^2+8*a*sqrt(a)*x-3*a^2)
->> solve((a^2+b^2)*x^4+(-a^3-a*b^2+a^2+b^2-a*b)*x^3+(-a^3-a*b^2+a^2*b-2*a^2-2*b^2-a*b)*x^2+(2*a^3+2*a*b^2+a^2*b+2*a*b)*x-2*a^2*b)`)}<p>a) −a, a, −2a; b) √a (triplă), −3√a; c) 1, −2, a, ab/(a²+b²).</p>` },
-    { title: 'Verificarea unei soluții a unei ecuații diferențiale', statement: `<p>Arată că f(x) = (x²/2 + x + 1)e<sup>x</sup> − x − 1 este soluție a ecuației y<sup>(4)</sup> − 2y‴ + y″ = e<sup>x</sup>.</p>`, solution: `${mls(`>> d2f=diff((x^2/2+x+1)*exp(x)-x-1,2)
+>> solve((a^2+b^2)*x^4+(-a^3-a*b^2+a^2+b^2-a*b)*x^3+(-a^3-a*b^2+a^2*b-2*a^2-2*b^2-a*b)*x^2+(2*a^3+2*a*b^2+a^2*b+2*a*b)*x-2*a^2*b)`)}
+      <p><b>Soluții</b></p>
+      ${mls(`a)
+   -a
+    a
+ -2*a
+b)
+    a^(1/2)
+    a^(1/2)
+    a^(1/2)
+ -3*a^(1/2)
+c)
+             1
+            -2
+             a
+ a*b/(a^2+b^2)`)}` },
+    { title: 'Verificarea unei soluții a unei ecuații diferențiale', statement: `
+      <p>Să se arate că funcția f(x) = (${frac('x<sup>2</sup>', '2')} + x + 1)·e<sup>x</sup> − x − 1 este soluție a ecuației diferențiale:</p>
+      <p style="text-align:center">y<sup>iv</sup> − 2·y<sup>iii</sup> + y<sup>ii</sup> = e<sup>x</sup></p>`,
+      solution: `<p><b>Indicații</b></p>
+      ${mls(syms + `>> d2f=diff((x^2/2+x+1)*exp(x)-x-1,2)
 >> d3f=diff((x^2/2+x+1)*exp(x)-x-1,3)
 >> d4f=diff((x^2/2+x+1)*exp(x)-x-1,4)
->> collect(d4f-2*d3f+d2f)`)}<p>Rezultatul este exp(x), deci f verifică ecuația.</p>` },
-  ],
+>> collect(d4f-2*d3f+d2f)`)}
+      <p>Rezultatul ultimei comenzi este exp(x), deci f verifică ecuația.</p>` },
+    ];
+  })(),
 });
