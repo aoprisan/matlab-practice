@@ -166,95 +166,388 @@ shading interp`)}
     { type: 'mc', q: 'În tabelul de răcire, cât durează răcirea de la 30 °C la 14 °C?', options: ['33 de minute', '25 de minute', '19 minute', '49 de minute'], answer: 0, explain: 'La intersecția liniei 30 cu coloana 14 gC.' },
   ],
   exercises: [
-    { title: 'Funcția tipvar', statement: `<p>Definește funcția tipvar care, pornind de la o variabilă x, răspunde cu tipul ei: 'scalar', 'vector' sau 'matrice'.</p>`, hint: '<p>Vezi ex. 2 din Lucrarea 10; scrie codul în Editorul consolei, cu prima linie ' + c('function y=tipvar(x)') + ', apoi Rulează și apelează ' + c('tipvar([1 2 3])') + '.</p>', solution: `${mls(`function y=tipvar(x)
-% tipvar raspunde cu 'scalar', 'vector' sau 'matrice'
+    { title: 'Funcția tipvar', statement: `<p>Definiți funcția tipvar care pornind de la o variabilă x ne răspunde cu tipul ei: ’scalar’,’vector’ sau ’matrice’.</p>`, hint: '<p>Vezi Ex.2 de la Lucrarea 10.</p><p>(Aici: scrie funcția în Editorul consolei, cu prima linie ' + c('function y=tipvar(x)') + ', apoi Rulează și apelează ' + c('tipvar([1 2 3])') + '.)</p>', solution: `${mls(`function y=tipvar(x)
+% functia determina tipul variabilei x
+%
+% apel y=tipvar(x)
+%
+% parametrii intrare
+%      x - variabila al carui tip se cere
+%
+% parametrii iesire
+%      y - contine tipul determinat al variabilei x
+%
+% variabile locale
+%      l - numarul de linii
+%      c - numarul de coloane
 [l,c]=size(x);
 if l==1&c==1
    y='scalar';
 elseif l==1|c==1
-   y='vector';
+       y='vector';
 else
-   y='matrice';
-end`)}${ml(`>> tipvar(1)
->> tipvar([1 2 3])
->> tipvar([1 2;3 4])`)}`, starter: "function y=tipvar(x)\n[l,c]=size(x);\nif l==1&c==1\n   y='scalar';\nelseif l==1|c==1\n   y='vector';\nelse\n   y='matrice';\nend" },
-    { title: 'Funcția lmet', statement: `<p>Definește funcția cu intrările x (lungime) și um (unitatea de măsură) și ieșirea lungimea în metri. Unități valide: 'ft' (0.3048 m), 'in' (0.0254 m), 'km', 'mm', 'yd' (0.91 m), 'mlt' (mila terestră, 1609.3 m), 'mlm' (mila marină, 1852 m). Pentru unități inexistente afișează un avertisment și returnează NaN.</p>`, solution: `${mls(`function y=lmet(x,um)
-% lmet transforma lungimea x din unitatea um in metri
-switch um
-   case 'ft'
-      y=x*0.3048;
-   case 'in'
-      y=x*0.0254;
-   case 'km'
-      y=x*1000;
-   case 'mm'
-      y=x/1000;
-   case 'yd'
-      y=x*0.91;
-   case 'mlt'
-      y=x*1609.3;
-   case 'mlm'
-      y=x*1852;
-   otherwise
-      disp('Atentie unitate inexistenta!!');
-      y=NaN;
-end`)}${ml(`>> lmet(1.82,'yd')
->> lmet(0.023,'mlm')
->> lmet(0.023,'kkk')`)}<p>1.6562; 42.5960; NaN (cu avertisment).</p>`, starter: "function y=lmet(x,um)\nswitch um\n   case 'ft'\n      y=x*0.3048;\n   case 'in'\n      y=x*0.0254;\n   case 'km'\n      y=x*1000;\n   case 'mm'\n      y=x/1000;\n   case 'yd'\n      y=x*0.91;\n   case 'mlt'\n      y=x*1609.3;\n   case 'mlm'\n      y=x*1852;\n   otherwise\n      disp('Atentie unitate inexistenta!!');\n      y=NaN;\nend" },
-    { title: 'Numărul e cu două șiruri', statement: `<p>Șirurile a<sub>n</sub> = 1 + Σ<sub>k=1..n</sub> 1/k! și b<sub>n</sub> = (1 + 1/n)<sup>n</sup> au aceeași limită e = 2.71828… Definește funcțiile e1 și e2 care calculează e cu precizia prec (intrare), returnând și numărul de termeni evaluați it. Care șir converge mai repede?</p>`, hint: '<p>Structura este ca la radpat: bucla while cât timp |y − exp(1)| &gt; prec, numărând termenii în it.</p>', solution: `${mls(`function [y,it]=e1(prec)
-% e1 calculeaza e cu sirul 1+sum(1/k!), pana cand |y-exp(1)|<=prec
-maxit=10000; it=0; y=1; term=1;
-while abs(y-exp(1))>prec & it<maxit
-   it=it+1;
-   term=term/it;
-   y=y+term;
+       y='matrice';
+end`)}${ml(`%% function y=tipvar(x)
+%% [l,c]=size(x);
+%% if l==1&c==1
+%%    y='scalar';
+%% elseif l==1|c==1
+%%    y='vector';
+%% else
+%%    y='matrice';
+%% end
+%% end
+>> x=1;
+>> tipvar(x)
+ans =
+scalar
+>> z=[1 2 3];
+>> tipvar(z)
+ans =
+vector
+>> w=[1 2;3 4];
+>> tipvar(w)
+ans =
+matrice`)}`, starter: "function y=tipvar(x)\n[l,c]=size(x);\nif l==1&c==1\n   y='scalar';\nelseif l==1|c==1\n   y='vector';\nelse\n   y='matrice';\nend" },
+    { title: 'Funcția lmet', statement: `<p>Definiți funcția care are ca date de intrare o lungime x și unitatea de măsură um a lui x, iar ca date de ieșire lungimea în metrii. Unitățile de măsură valide sunt<br>
+ - ’ft’ pentru picior 1 ft=0.3048 m;<br>
+ - ’in’ pentru inch 1 in= 0.0254 m;<br>
+ - ’km’ pentru kilometru;<br>
+ - ’mm’ pentru milimetru;<br>
+ - ’yd’ pentru yard 1 yd= 0.91 m;<br>
+ - ’mlt’ pentru mila terestră 1 mlt= 1609.3 ;<br>
+ - ’mlm’ pentru mila marină 1 mlm= 1852 m.</p>`, hint: '<p>Vezi Ex.3 de la Lucrarea 10.</p>', solution: `${mls(`function lungimem=lmet(lungime,unitate)
+% Functia calculeaza lungimea in metrii
+%
+% Apel l=lmat(x,u) sau lmat(x,u)
+%
+% Parametrii intrare
+%   lungime - lungimea
+%   unitate - unitatea de masura a lungimii
+%
+% Parametrii ieire
+%   lungimem - lungimea in metrii
+% Variabile locale
+switch unitate
+    case 'in'
+          lungimem=lungime*0.0254;
+    case 'ft'
+          lungimem=lungime*0.3048;
+    case 'm'
+          lungimem=lungime;
+    case 'km'
+          lungimem=1000*lungime;
+    case 'mm'
+          lungimem=lungime/1000;
+    case 'yd'
+          lungimem=0.91*lungime;
+    case 'mlt'
+          lungimem=1609.3*lungime;
+    case 'mlm'
+          lungimem=1852*lungime;
+    otherwise
+% In cazul cand unitatea de masura nu este una valida
+% se face o atentionare si se introduce NaN ca raspuns
+          lungimem=NaN;
+          disp ' Atentie unitate inexistenta!!';
+end`)}${ml(`%% function lungimem=lmet(lungime,unitate)
+%% switch unitate
+%%     case 'in'
+%%           lungimem=lungime*0.0254;
+%%     case 'ft'
+%%           lungimem=lungime*0.3048;
+%%     case 'm'
+%%           lungimem=lungime;
+%%     case 'km'
+%%           lungimem=1000*lungime;
+%%     case 'mm'
+%%           lungimem=lungime/1000;
+%%     case 'yd'
+%%           lungimem=0.91*lungime;
+%%     case 'mlt'
+%%           lungimem=1609.3*lungime;
+%%     case 'mlm'
+%%           lungimem=1852*lungime;
+%%     otherwise
+%%           lungimem=NaN;
+%%           disp(' Atentie unitate inexistenta!!');
+%% end
+%% end
+>> x=1.82;
+>> u='yd';
+>> lmet(x,u)
+ans =
+   1.6562
+>> x=0.023;
+>> u='mlm';
+>> lmet(x,u)
+ans =
+  42.5960
+>> u='kkk';
+>> lmet(x,u)
+ Atentie unitate inexistenta!!
+ans =
+  NaN`)}`, starter: "function lungimem=lmet(lungime,unitate)\nswitch unitate\n    case 'in'\n          lungimem=lungime*0.0254;\n    case 'ft'\n          lungimem=lungime*0.3048;\n    case 'm'\n          lungimem=lungime;\n    case 'km'\n          lungimem=1000*lungime;\n    case 'mm'\n          lungimem=lungime/1000;\n    case 'yd'\n          lungimem=0.91*lungime;\n    case 'mlt'\n          lungimem=1609.3*lungime;\n    case 'mlm'\n          lungimem=1852*lungime;\n    otherwise\n          lungimem=NaN;\n          disp(' Atentie unitate inexistenta!!');\nend" },
+    { title: 'Numărul e cu două șiruri', statement: `<p>Se știe că șirurile: a<sub>n</sub> = 1 + <span style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1"><small>n</small><span style="font-size:1.5em">Σ</span><small>k=1</small></span>${frac('1', 'k !')} și b<sub>n</sub> = <span style="font-size:1.6em;vertical-align:middle">(</span>1 + ${frac('1', 'n')}<span style="font-size:1.6em;vertical-align:middle">)</span><sup>n</sup> au aceeași limită e (numărul lui Euler), adică în MATLAB exp(1)=2.71828182845905. Definiți funcțiile e1, (respectiv e2), care utilizând șirul a<sub>n</sub>, (respectiv b<sub>n</sub>), să calculeze pe e (dată ieșire) cu precizia prec(dată intrare), indicând și câți termeni din șir au fost evaluați în it (dată ieșire) .  Comparând cei doi it obținuți deduceți care din cele două șiruri converge mai rapid la e.</p>`, hint: '<p>Structura funcțiilor e1 și e2 de calcul a lui e este asemănătoare cu cea a funcției radpat din exemplul de mai sus.</p>', solution: `<p>Funcția e1:</p>${mls(`function [y,itf]=e1(prec)
+% Functia e1 calculeaza valoarea lui e cu precizia prec
+% Se utilizeaza faptul ca sirul a(n)=a(n-1)+1/n! tinde catre
+%    numarul lui Euler e
+% Pentru calculul factorialului se utilizeaza n!=gamma(n+1)
+% Apelul se face cu [y,itf]=e1(prec)
+% parametrii intrare
+%        prec  precizia dorita
+% parametrii iesire
+%        y     valoarea calculata a lui e cu precizia prec
+%        itf   numarul de iteratii necesar calculului
+% variabile locale
+%        maxit numarul maxim de iteratii
+%        it    iteratia curenta
+%        yold  valoarea lui y din iteratia anterioara
+maxit=1000;
+it=0;
+y=0;
+yold=2;
+while abs(yold-y)>prec & it<maxit
+    yold=y;
+    y=yold+1/gamma(it+1);
+    it=it+1;
 end
+if it==maxit
+    disp('Atentie!! S-au depasit numarul maxim de iteratii');
+end
+itf=it-1;`)}<p>Funcția e2:</p>${mls(`function [y,itf]=e2(prec)
+% Functia e1 calculeaza valoarea lui e cu precizia prec
+% Se utilizeaza faptul ca sirul a(n)=(1+1/n)^n tinde catre
+%    numarul lui Euler e
+% Pentru calculul factorialului se utilizeaza n!=gamma(n+1)
+% Apelul se face cu [y,itf]=e1(prec)
+% parametrii intrare
+%        prec  precizia dorita
+% parametrii iesire
+%        y     valoarea calculata a lui e cu precizia prec
+%        itf   numarul de iteratii necesar calculului
+% variabile locale
+%        maxit numarul maxim de iteratii
+%        it    iteratia curenta
+%        yold  valoarea lui e data de exp(1)
+maxit=10000;
+it=0.;
+y=0;
+yold=exp(1);
+while abs(y-yold)>prec & it<maxit
+    y=(1+1/it)^it;
+    it=it+1;
+end
+if it==maxit
+    disp('Atentie!! S-au depasit numarul maxim de iteratii');
+end
+itf=it-1;`)}${ml(`%% function [y,itf]=e1(prec)
+%% maxit=1000; it=0; y=0; yold=2;
+%% while abs(yold-y)>prec & it<maxit
+%%     yold=y;
+%%     y=yold+1/gamma(it+1);
+%%     it=it+1;
+%% end
+%% if it==maxit
+%%     disp('Atentie!! S-au depasit numarul maxim de iteratii');
+%% end
+%% itf=it-1;
+%% end
+%% function [y,itf]=e2(prec)
+%% maxit=10000; it=0.; y=0; yold=exp(1);
+%% while abs(y-yold)>prec & it<maxit
+%%     y=(1+1/it)^it;
+%%     it=it+1;
+%% end
+%% if it==maxit
+%%     disp('Atentie!! S-au depasit numarul maxim de iteratii');
+%% end
+%% itf=it-1;
+%% end
+>> [y1,i1]=e1(0.001);
+>> [y2,i2]=e2(0.001);
+>> i1
+i1 =
+   7
+>> i2
+i2 =
+     1359`)}<p>Se observă faptul că primul șir este mult mai rapid convergent. Dar chiar dacă rulăm programele la infinit nu vom obține niciodată valoarea exactă a lui e !!! (nici exp(1) nu este valoarea exactă a lui e!!). Numărul  e este o abstracție tipic umană. Este un număr cu o infinitate de zecimale care este caracterizat exact de faptul că este limita șirurilor de mai sus.</p>`, starter: "function [y,itf]=e1(prec)\nmaxit=1000;\nit=0;\ny=0;\nyold=2;\nwhile abs(yold-y)>prec & it<maxit\n    yold=y;\n    y=yold+1/gamma(it+1);\n    it=it+1;\nend\nif it==maxit\n    disp('Atentie!! S-au depasit numarul maxim de iteratii');\nend\nitf=it-1;\n\nfunction [y,itf]=e2(prec)\nmaxit=10000;\nit=0.;\ny=0;\nyold=exp(1);\nwhile abs(y-yold)>prec & it<maxit\n    y=(1+1/it)^it;\n    it=it+1;\nend\nif it==maxit\n    disp('Atentie!! S-au depasit numarul maxim de iteratii');\nend\nitf=it-1;" },
+    { title: 'Funcția brrc și tabelul de răcire', statement: `<p>Revenire la problema berii reci. În ex.7 Lucrarea 10 s-a presupus că temperatura mediului ambient este de 30<sup>o</sup>C. În realitate uneori au fost și 39<sup>o</sup>C. De aceea trebuie să rezolvăm complet problema aceasta importantă. Va trebui să construim un tabel cu valorile de timp de răcire pentru temperaturi cuprinse între 20<sup>o</sup>C și 45<sup>o</sup>C. Timpi vor fi calculați cu o funcție brrc (a se citi be-re-re-ce) ce are ca parametru de intrare temperatura ambientală, iar ca parametru de ieșire durata de răcire în minute.</p>`, hint: `<p>Vezi Ex. 4 lucrarea 10. În plus trebuie impuse niște condiții ca problema să aibă sens:<br>
+ - Temperatura mediului (adică cea inițială a berii) trebuie să fie cea de vară să zicem în intervalul [20, 45];<br>
+ - Temperatura finală a berii trebuie să fie evident mai mică decât cea inițială Si evident mai mare decât temperatura frigiderului;<br>
+ - Coeficientul de conducție trebuie să fie un număr pozitiv subunitar.</p>
+<p style="text-indent:2em">Dacă nu sunt verificate condițiile de mai sus nu se calculează nimic și se iese din funcție cu comanda return (asta chiar face această comandă.</p>
+<p style="text-indent:2em">Vom construi un tabel în care fiecare linie va corespunde unei temperaturi inițiale ,prima coloană va conține aceste temperaturi. Restul coloanelor vor conține durata de răcire pentru o temperatură din intervalul 12<sup>o</sup>C, … , 16<sup>o</sup>C, intervalul optim de răcire. Tabelul îl vom construi într-un script ca să-l putem testa. La tipărire vom utiliza funcția fprintf.</p>`, solution: `<p>Funcția brrc:</p>${mls(`function t=brrc(tin,tbf)
+% functia calculeaza durata de racire a beriipormind de la formula
+%      T(i+1)=T(i)+K(t(i+1)-t(i))(Tf-T(i))
+%   Apelarea se face y=brrc(t) sau brrc(t) cu 20<t<45
+%
+%   parametrii intrare
+%    tin - temperatura mediului ambiant (initiala a berii) in grade C
+%          verifica 20<tin<45
+%    tbf - temperatura dorita a berii tin>tbf>10
+%
+%   parametrii iesire
+%     t - durata de timp in minute
+%
+%   variabile locale
+%     k - conductia are sens in intervalul[0, 1]
+%     tb - valoarea la momentul t a sirului
+%     tbn - valoarea la momentul t+1 a sirului
+%
+ if tin<20|tin>45
+    disp('Temperatura mediu este in afara intervalului [20, 45] !!')
+    return
+ end
+ tf=10;
+ if tbf>tin|tbf<tf
+     disp('temperatura fibala a berii nu este in intervalul [tf, tin]')
+     return
+ end
+ k=0.05;
+ if k<0|k>1
+     Disp('Conductia nu este un numar pozitiv subunitar')
+     return
+ end
+ tb=tin;
+ t=1;
+ while tb > tbf
+       tbn=tb+k*(tf-tb);
+       tb=tbn;
+       t=t+1;
+ end`)}<p>Scriptul tabel este:</p>${mls(`fprintf('                             Tabel racire bere [min] \\n')
+fprintf('\\n Temp. mediu      durata    durata    durata    durata    durata    durata \\n')
+fprintf('grd.Celsius[gC]   la 13gC   la 14gC   la 15gC   la 16gC   la 17gC   la 18gC\\n')
+fprintf('==========================================================================')
+for tm=20:45
+    fprintf('\\n      %4d     ',tm)
+    for tr=13:18
+        fprintf('    %4d  ',brrc(tm,tr))
+    end
+end
+fprintf('\\n')`)}<p style="text-indent:2em">Dacă tastăm în MATLAB</p>${mls(`>> tabel`)}<p>obținem:</p>${ml(`%% function t=brrc(tin,tbf)
+%% if tin<20|tin>45
+%%    disp('Temperatura mediu este in afara intervalului [20, 45] !!')
+%%    return
+%% end
+%% tf=10;
+%% if tbf>tin|tbf<tf
+%%    disp('temperatura fibala a berii nu este in intervalul [tf, tin]')
+%%    return
+%% end
+%% k=0.05;
+%% if k<0|k>1
+%%    disp('Conductia nu este un numar pozitiv subunitar')
+%%    return
+%% end
+%% tb=tin;
+%% t=1;
+%% while tb > tbf
+%%    tbn=tb+k*(tf-tb);
+%%    tb=tbn;
+%%    t=t+1;
+%% end
+%% end
+%% fprintf('                             Tabel racire bere [min] \\n')
+%% fprintf('\\n Temp. mediu      durata    durata    durata    durata    durata    durata \\n')
+%% fprintf('grd.Celsius[gC]   la 13gC   la 14gC   la 15gC   la 16gC   la 17gC   la 18gC\\n')
+%% fprintf('==========================================================================')
+%% for tm=20:45
+%%     fprintf('\\n      %4d     ',tm)
+%%     for tr=13:18
+%%         fprintf('    %4d  ',brrc(tm,tr))
+%%     end
+%% end
+%% fprintf('\\n')
+                 Tabel racire bere [min]
 
-function [y,it]=e2(prec)
-% e2 calculeaza e cu sirul (1+1/n)^n, pana cand |y-exp(1)|<=prec
-maxit=100000; it=0; y=1;
-while abs(y-exp(1))>prec & it<maxit
-   it=it+1;
-   y=(1+1/it)^it;
-end`)}${ml(`>> [y1,i1]=e1(0.001)
->> [y2,i2]=e2(0.001)`)}<p>i1 = 6 (7 termeni evaluați, cu termenul inițial 1), i2 = 1359: primul șir este mult mai rapid convergent. Dar oricât am rula, nu obținem valoarea exactă a lui e (nici exp(1) nu este exactă) – e este un număr cu o infinitate de zecimale, caracterizat exact ca limită a acestor șiruri.</p>`, starter: "function [y,it]=e1(prec)\nmaxit=10000; it=0; y=1; term=1;\nwhile abs(y-exp(1))>prec & it<maxit\n   it=it+1;\n   term=term/it;\n   y=y+term;\nend\n\nfunction [y,it]=e2(prec)\nmaxit=100000; it=0; y=1;\nwhile abs(y-exp(1))>prec & it<maxit\n   it=it+1;\n   y=(1+1/it)^it;\nend" },
-    { title: 'Funcția brrc și tabelul de răcire', statement: `<p>Funcția brrc are ca intrare temperatura ambiantă (a berii) și ca ieșire durata de răcire în minute. Condiții de sens: temperatura mediului în [20, 45]; temperatura finală mai mică decât cea inițială și mai mare decât a frigiderului; K pozitiv subunitar – altfel se iese cu ${c('return')}. Construiește apoi un script care afișează cu fprintf tabelul duratelor pentru temperaturi ale mediului de la 20 la 45 °C și temperaturi finale 13…18 °C.</p>`, solution: `${mls(`function t=brrc(tamb,tbf,k,tf)
-% brrc durata (minute) de racire a berii de la tamb la tbf
-% tf temperatura frigiderului, k coeficientul de conductie
-t=NaN;
-if tamb<20 | tamb>45, return, end
-if tbf>=tamb | tbf<=tf, return, end
-if k<=0 | k>=1, return, end
-tb=tamb; t=1;
-while tb>tbf
-   tb=tb+k*(tf-tb);
-   t=t+1;
-end`)}${mls(`% scriptul tabel
-fprintf('               Tabel racire bere [min]\\n\\n');
-fprintf(' Temp. mediu    durata durata durata durata durata durata\\n');
-fprintf('grd.Celsius[gC] la 13gC la 14gC la 15gC la 16gC la 17gC la 18gC\\n');
-fprintf('===================================================\\n');
-for tamb=20:45
-   fprintf('%6d      ',tamb);
-   for tbf=13:18
-      fprintf('%7d',brrc(tamb,tbf,0.05,10));
-   end
-   fprintf('\\n');
-end`)}${ml(`>> brrc(30,14,0.05,10)`)}<p>Pentru 30 °C și răcire la 14 °C durata este 33 de minute.</p>`, starter: "function t=brrc(tamb,tbf,k,tf)\nt=NaN;\nif tamb<20 | tamb>45, return, end\nif tbf>=tamb | tbf<=tf, return, end\nif k<=0 | k>=1, return, end\ntb=tamb; t=1;\nwhile tb>tbf\n   tb=tb+k*(tf-tb);\n   t=t+1;\nend" },
-    { title: 'indvect și vectind', statement: `<p>MATLAB memorează matricile coloană după coloană, deci o matrice poate fi privită ca un vector de lungime r·c. Definește indvect(x,i,j) care dă indicele k al elementului (i,j) în x privit ca vector, și vectind(x,k) care dă (i,j) din k.</p>`, hint: '<p>k = (j−1)·r + i. Invers: i = rem(k, r) (dacă e 0, atunci i = r), j = (k−i)/r + 1.</p>', solution: `${mls(`function k=indvect(x,i,j)
-% indvect indicele liniar al elementului (i,j)
+ Temp. mediu    durata  durata  durata  durata  durata  durata
+grd.Celsius[gC] la 13gC la 14gC la 15gC la 16gC la 17gC la 18gC
+================================================================
+     20            25      19      15      11       8       6
+     21            27      21      17      13      10       8
+     22            29      23      19      15      12       9
+     23            30      24      20      17      14      11
+     24            32      26      22      18      15      12
+     25            33      27      23      19      16      14
+     26            34      29      24      21      18      15
+     27            35      30      25      22      19      16
+     28            36      31      26      23      20      17
+     29            37      32      28      24      21      18
+     30            38      33      29      25      22      19
+     31            39      34      29      26      23      20
+     32            40      35      30      27      24      21
+     33            41      36      31      28      25      22
+     34            42      36      32      29      26      23
+     35            43      37      33      29      26      24
+     36            44      38      34      30      27      24
+     37            44      39      34      31      28      25
+     38            45      39      35      32      29      26
+     39            46      40      36      32      29      27
+     40            46      41      36      33      30      27
+     41            47      41      37      34      31      28
+     42            48      42      38      34      31      29
+     43            48      43      38      35      32      29
+     44            49      43      39      35      32      30
+     45            49      44      39      36      33      30`)}<p>De exemplu durata de răcire a berii în cazul temperaturii mediului de 30<sup>o</sup>C și cea de răcire de 14<sup>o</sup>C este de 33 minute.(la intersecția liniei 30 cu coloana 14).</p>`, starter: "function t=brrc(tin,tbf)\nif tin<20|tin>45\n   disp('Temperatura mediu este in afara intervalului [20, 45] !!')\n   return\nend\ntf=10;\nif tbf>tin|tbf<tf\n   disp('temperatura finala a berii nu este in intervalul [tf, tin]')\n   return\nend\nk=0.05;\nif k<0|k>1\n   disp('Conductia nu este un numar pozitiv subunitar')\n   return\nend\ntb=tin;\nt=1;\nwhile tb > tbf\n   tbn=tb+k*(tf-tb);\n   tb=tbn;\n   t=t+1;\nend" },
+    { title: 'indvect și vectind', statement: `<p>Se știe că MATLAB memorează matricile coloană după coloană. De aceea o matrice poate fi privită (și deseori MATLAB o face!) ca un vector de lungime r*c (r – număr linii, c- număr coloane). Să se definească o funcție indvect pentru care dându-se  o matrice x și indicii (i,j) ai unui element să se obțină indicele k al aceluiași element în x privit ca vector. De asemenea fiind dată o matrice x și indicele k al unui element din x fiind privit ca un vector să se scrie o funcție vectind ce determină indicii (i,j) ai aceluiași element din x privit ca o matrice.</p>`, hint: `<p>Formula de calcul a lui k este dată de (r numărul de linii al matricii) :</p><p style="text-align:center">k = ( j − 1) r + i</p><p>Dacă cunoaștem indicele k atunci di formula de mai sus deducem că i este restul împărțirii lui k la r iar j va fi dat de formula:</p><p style="text-align:center">j = ${frac('k − i', 'r')} + 1</p><p>Reamintim că restul împărțirii unui număr n la m este rem(n,m).</p>`, solution: `<p>Funcția indvect:</p>${mls(`function k=indvect(x,i,j)
+% functia calculeaza indicele unui element daca matricea x este
+%         privita ca un vector
+%
+% Apelarea se face k=indvect(x,i,j) sau indvect(x,i,j)
+%
+% Parametrii de intrare
+%      x - matricea de studiat
+%      i - linia elementului
+%      j - coloana elementului
+%
+% Parametrii de iesire
+%      k - indicele din vector al elementului
+%
+% Variabile locale
 [r,c]=size(x);
 k=(j-1)*r+i;
-
-function [i,j]=vectind(x,k)
-% vectind indicii (i,j) ai elementului cu indice liniar k
+return`)}${mls(`function [i,j]=vectind(x,k)
+% functia calculeaza indicii (i,j)unui element din matricea x daca matricea x este
+%         privita ca un vector
+%
+% Apelarea se face [i,j]=indvect(x,k)
+%
+% Parametrii de intrare
+%      x - matricea de studiat
+%      k - indicele din vector al elementului
+%
+% Parametrii de iesire
+%
+%      i - linia elementului
+%      j - coloana elementului
+% Variabile locale
 [r,c]=size(x);
 i=rem(k,r);
-if i==0
-   i=r;
-end
-j=(k-i)/r+1;`)}${ml(`>> a=[1 2 3;4 5 6;7 8 9];
+j=(k-i)/r+1;
+return`)}${ml(`%% function k=indvect(x,i,j)
+%% [r,c]=size(x);
+%% k=(j-1)*r+i;
+%% return
+%% end
+%% function [i,j]=vectind(x,k)
+%% [r,c]=size(x);
+%% i=rem(k,r);
+%% j=(k-i)/r+1;
+%% return
+%% end
+>> a=[1 2 3;4 5 6;7 8 9]
+a =
+    1     2     3
+    4     5     6
+    7     8     9
 >> indvect(a,2,3)
->> [i,j]=vectind(a,8)`)}<p>indvect(a,2,3) = 8; vectind(a,8) = (2, 3).</p>`, starter: "function k=indvect(x,i,j)\n[r,c]=size(x);\nk=(j-1)*r+i;\n\nfunction [i,j]=vectind(x,k)\n[r,c]=size(x);\ni=rem(k,r);\nif i==0\n   i=r;\nend\nj=(k-i)/r+1;" },
+ans =
+    8
+>> [i,j]=vectind(a,8)
+i =
+    2
+j =
+    3`)}<p>(Observație: dacă k este multiplu de r, ${c('rem(k,r)')} dă 0; în acest caz trebuie pus i=r, de exemplu cu ${c('if i==0, i=r; end')} înainte de calculul lui j.)</p>`, starter: "function k=indvect(x,i,j)\n[r,c]=size(x);\nk=(j-1)*r+i;\nreturn\n\nfunction [i,j]=vectind(x,k)\n[r,c]=size(x);\ni=rem(k,r);\nj=(k-i)/r+1;\nreturn" },
   ],
 });

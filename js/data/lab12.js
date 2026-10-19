@@ -144,67 +144,278 @@ Warning: Divide by zero.`)}
     { type: 'mc', q: 'În scriptul supr1 din aplicații, care linie conține o eroare de <b>execuție</b> (nu sintactică)?', options: [c('z=(x.^2+y.^2)./(x.*y)') + ' – împărțire cu 0 unde x sau y este 0', c('x=-2:0,2:2') + ' – virgulă în loc de punct', c('Surf(x,y,z)') + ' – S mare', c('(x,y)=meshgraid(x,y)') + ' – paranteze rotunde'], answer: 0, explain: 'Celelalte trei sunt erori sintactice. Vectorul −2:0.2:2 conține 0.' },
   ],
   exercises: [
-    { title: 'Depanează scriptul supr1', statement: `<p>Scrie exact așa cum este scris scriptul, apoi depanează-l:</p>${mls(`x=-2:0,2:2;
+    { title: 'Depanează scriptul supr1', statement: `<p>Scrieți exact așa cum este scris scriptul supr1, apoi depanați-l :</p>${mls(`x=-2:0,2:2;
 y=(6-x)./(3-x;
 (x,y)=meshgraid(x,y);
 z=(x.^2+y.^2)/(x*y);
-Surf(x,y,z)`)}`, hint: '<p>Caută: virgula zecimală, paranteza neînchisă, parantezele pătrate ale listei de ieșire, numele funcției, operatorii cu punct, litera mare, și apoi împărțirea cu 0.</p>', solution: `<p>Erori sintactice: linia 1 col. 7 – punct în loc de virgulă zecimală (notația americană); linia 2 col. 14 – paranteză neînchisă; linia 3 col. 3 – paranteze pătrate pentru parametrii de ieșire; linia 3 col. 7 – meshgraid nu există (meshgrid); linia 4 col. 14 și 18 – împărțirea și înmulțirea cu punct; linia 5 col. 1 – surf cu s mic. Eroare de execuție: linia 4 – împărțire cu 0.</p>${ml(`>> x=-2:0.2:2;
+Surf(x,y,z)`)}`, hint: `<p>Erori sintactice:<br>
+Linia   1 col.   7 – se pune punct în loc de virgula zecimală (notația americană);<br>
+Linia   2 col .14 – paranteză închisă;<br>
+Linia   3 col.   3 – paranteze pătrate pentru parametrii de ieșire;<br>
+Linia   3 col.   7 – funcția meshgraid inexistentă (este meshgrid);<br>
+Linia   4 col. 14 – operația de împărțire cu punct;<br>
+Linia   4 col. 18 – operația de împărțire cu punct;<br>
+Linia    5 col. 1  - funcția surf cu litera s mic;<br>
+ Erori de execuție:<br>
+Linia 4  - împărțire cu 0;</p>`, solution: `${mls(`x=-2:0.2:2;
+y=(6-x)./(3-x);
+[x,y]=meshgrid(x,y);
+xxyy=x.*y;
+xxyy=xxyy+(xxyy==0)*eps;
+x2y2=x.^2+y.^2;
+x2y2=x2y2+(x2y2==0)*eps;
+z=x2y2./xxyy;
+surf(x,y,z)`)}<p>Se obține suprafața z = (x<sup>2</sup>+y<sup>2</sup>)/(x·y) desenată de ${c('surf')} (grafic 3D, disponibil doar în MATLAB). Fără ultima linie, scriptul se poate rula și aici:</p>${ml(`>> x=-2:0.2:2;
 >> y=(6-x)./(3-x);
 >> [x,y]=meshgrid(x,y);
->> xy=x.*y; xy=xy+(xy==0)*eps;
->> z=(x.^2+y.^2)./xy;
->> size(z)`)}<p>În MATLAB urmează ${c('surf(x,y,z)')}.</p>` },
-    { title: 'Matricea alab: a<sub>i</sub> la puterea b<sub>j</sub>', statement: `<p>Determină matricea alab cu elementele obținute ridicând fiecare element al lui a la puterea fiecărui element al lui b. Pentru a = [1, 2], b = [2, 3]: ${eqm('alab', '1 4;1 8')}. Compară varianta cu bucle (alab1) cu cea vectorizată (alab2) pentru a = 1:10000, b = 1:20.</p>`, solution: `${ml(`>> a=1:2000; b=1:20;
->> tic; alab=zeros(length(b),length(a)); for i=1:length(b), for j=1:length(a), alab(i,j)=a(j)^b(i); end, end, toc
->> tic; [A,B]=meshgrid(a,b); alab=A.^B; toc
->> a=[1,2]; b=[2,3]; [A,B]=meshgrid(a,b); alab=A.^B`)}<p>Manualul: alab1 (bucle) 2.516 s, alab2 (vectorizat) 0.250 s.</p>`, check: [{ var: 'alab', expected: '[1 4;1 8]' }] },
-    { title: 'Tips and tricks', statement: `<p>a) matrice cu toate elementele egale cu un număr dat – două soluții; b) vector cu elementele în ordine inversă – cu buclă și vectorizat; c) matrice m×n cu coloane identice cu un vector dat – două soluții.</p>`, solution: `${ml(`>> k=7; n=2; m=3;
+>> xxyy=x.*y;
+>> xxyy=xxyy+(xxyy==0)*eps;
+>> x2y2=x.^2+y.^2;
+>> x2y2=x2y2+(x2y2==0)*eps;
+>> z=x2y2./xxyy;
+>> size(z)`)}` },
+    { title: 'Matricea alab', statement: `<p>Să se determine matricea alab ale cărui elemente sunt obținute din elementele a doi vectori a și b astfel: fiecare element al lui a este ridicat la puterea fiecare element al lui b. De exemplu dacă a=[1,2] și b= [2,3], atunci alab va fi ${eqm('alab', '1<sup>1</sup> 2<sup>1</sup>;1<sup>3</sup> 2<sup>3</sup>')}, adică: ${eqm('alab', '1 4;1 8')}</p>`, hint: `<p>Este clar că alab va fi o matrice cu numărul de linii egal cu lungimea lui b iar numărul de coloane egal cu lungimea lui a. se pot face două bucle for imbricate pentru determinarea  elementelor lui alab. Aceasta este forma clasică a programării. MATLAB are funcția meshgrid ce transformă vectorii în matrici și care poate fi utilizată.</p>`, solution: `<p>Scriptul alab1:</p>${mls(`tic
+r=length(b);
+c=length(a);
+for i=1:r
+    for j=1:c
+        alab(i,j)=a(j)^b(i);
+    end
+end
+toc`)}<p>Scriptul alab2:</p>${mls(`tic
+[aa,bb]=meshgrid(a,b);
+alab=aa.^bb;
+toc`)}<p>Execuția:</p>${mls(`>> a=1:10000;
+>> b=1:20;
+>> alab1
+Elapsed time is 2.516000 seconds.
+>> alab2
+Elapsed time is 0.250000 seconds.`)}<p>Se remarcă timpul mult mai mic al scriptului vectorizat.</p><p>(În enunț, prima linie a primei matrici ar trebui să fie 1<sup>2</sup> 2<sup>2</sup>, de unde 1 4.) Cele două scripturi se pot rula și aici:</p>${ml(`>> a=1:10000;
+>> b=1:20;
+>> tic
+>> r=length(b);
+>> c=length(a);
+>> for i=1:r
+..     for j=1:c
+..         alab(i,j)=a(j)^b(i);
+..     end
+.. end
+>> toc
+>> tic
+>> [aa,bb]=meshgrid(a,b);
+>> alab=aa.^bb;
+>> toc
+>> a=[1,2]; b=[2,3];
+>> [aa,bb]=meshgrid(a,b);
+>> alab=aa.^bb`)}`, check: [{ var: 'alab', expected: '[1 4;1 8]' }] },
+    { title: 'Tips and tricks', statement: `<p>Tips and tricks. Sub acest nume în informatică se înțelege șmecheria, trucul cu care obținem mai rapid o soluție. In acest punct de vedere vectorizarea pare că face parte din această categorie.<br>
+a) Cum definim o matrice a cărui elemente sunt egale cu un număr dat. Da-ti cel puțin două soluții.<br>
+b) Cum obținem un vector a cărui elemente sunt în ordine inversă cu cele ale unui vector dat? Da-ți o soluție cu buclă și una vectorizată.<br>
+c) Cum definim o matrice de tip mXn cu coloane identice cu un vector dat? Dați cel puțin două soluții.</p>`, hint: `<p>a) O soluție ar fi utilizarea lui ones(n,m). O altă soluție ar fi utilizarea funcției repmat(A,n,m) care repetă o matrice A de n ori pe linie și de m ori pe coloană.<br>
+b) Definim o buclă în care primul element al noului vector să fie egal cu ultimul element al celui dat, al doilea element al noului vector să fie egal cu penultimul element al celui dat, ș. a. m. d. pentru vectorizare putem utiliza adresarea cu operatorul :.<br>
+c) Fiind vorba de o matrice o vom crea cu două bucle for îmbricate. Există și forme vectorizate ale scriptului bazate pe concatenare și operatorul : sau repmat.</p>`, solution: `<p>a) Presupunem că t este constanta egală cu toate elementele și n și m dimensiunile matricii. Putem da oricare din comenzile:</p>${mls(`>> A=k*ones(n,m);`)}<p>Sau</p>${mls(`>> A=k; A=repmat(A,n,m);`)}<p>b) O buclă for rezolvă problema:</p>${mls(`for i=1:length(v)
+    w(i)=v(length(x)-i+1);
+end`)}<p>Vectorul w va conține elementele lui v în ordine inversă. Vectorial:</p>${mls(`W=v(end:-1:1)`)}<p>Iată o utilizare interesantă a lui end.</p><p>c) Presupunem că avem vectorul coloană v de dimensiune m. Atunci putem creaa matricea M astfel:</p>${mls(`for i=1:m
+    for j=1:n
+        M(i,j)=v(i);
+    end
+end`)}<p>Variantele vectorizate sunt:</p>${mls(`N=v(:,ones(n,1))`)}<p>Sau</p>${mls(`O=repmat(v,1,n)`)}<p>(La a) constanta este notată k în comenzi; la b) în buclă trebuie ${c('length(v)')} în loc de ${c('length(x)')}.) Toate variantele, rulate pe exemple:</p>${ml(`>> k=7; n=2; m=3;
 >> A=k*ones(n,m)
->> A=repmat(k,n,m)
+>> A=k; A=repmat(A,n,m)
 >> v=[1 2 3 4];
->> for i=1:length(v), w(i)=v(length(v)-i+1); end, w
->> w=v(end:-1:1)
->> v=[1;2;3]; n=4;
->> for i=1:3, for j=1:n, M(i,j)=v(i); end, end, M
+>> for i=1:length(v)
+..     w(i)=v(length(v)-i+1);
+.. end
+>> w
+>> W=v(end:-1:1)
+>> v=[1;2;3]; m=3; n=4;
+>> for i=1:m
+..     for j=1:n
+..         M(i,j)=v(i);
+..     end
+.. end
+>> M
 >> N=v(:,ones(n,1))
 >> O=repmat(v,1,n)`)}`, check: [{ var: 'w', expected: '[4 3 2 1]' }, { var: 'N', expected: '[1 1 1 1;2 2 2 2;3 3 3 3]' }, { var: 'O', expected: '[1 1 1 1;2 2 2 2;3 3 3 3]' }] },
-    { title: 'Vectorizarea buclei for cu if', statement: `<p>Prelucrarea clasică: două bucle for și un if. Pentru condiția a(i,j)&gt;5, prelucrarea 1: a(i,j)=5, prelucrarea 2: a(i,j)=−a(i,j). Cum se scrie fără niciun for și fără if?</p>`, solution: `${ml(`>> a=[1 7 3;9 5 6];
->> b=a; [r,c]=size(b);
->> for i=1:r, for j=1:c, if b(i,j)>5, b(i,j)=5; else b(i,j)=-b(i,j); end, end, end, b
->> a(a<=5)=-a(a<=5); a(a>5)=5`)}`, check: [{ var: 'a', expected: '[-1 5 -3;5 -5 5]' }] },
-    { title: 'Funcția indlinie', statement: `<p>Funcția indlinie are ca intrare o matrice și ca ieșire o matrice cu două coloane: indicii (linie, coloană) ai primului element nenul de pe fiecare linie. Liniile numai cu 0 nu apar. Încearcă și o formă vectorizată.</p>`, hint: '<p>Cu for-if e nevoie de un semnal că pentru linia curentă s-a găsit deja primul element, și de un indice de lucru pentru matricea de ieșire, incrementat la fiecare memorare.</p>', solution: `${mls(`function y=indlinie(A)
-% indlinie indicii primului element nenul de pe fiecare linie
-[r,c]=size(A);
-y=[]; k=0;
+    { title: 'Vectorizarea buclei for cu if', statement: `<p>Vectorizarea buclei for cu if. Deseori prelucrarea elementelor unei matrici conduce l două bucle for îmbricate (pentru a accesa elementul) și un if pentru prelucrare:</p>${mls(`for i=1:r
+     for j=1:c
+          if cond
+            prelucrare1 a(i,j);
+          else
+            prelucrare2 a(i,j);
+          end
+     end
+end`)}<p>De exemplu pentru condiție avem a(i,j)&gt;5, iar prelecrare 1 poate fi a(i,j)=a(i,j)=5, iar prelucrare 2 : a(i,j)=-a(i,j).<br>Cum se scrie această secvență fără nici un for și fără if?</p>`, hint: '<p>Se va utiliza accesarea indexată.</p>', solution: `<p>Scriptul inițial este forcuif :</p>${mls(`[r,c]=size(A);
 for i=1:r
-   gasit=0;
-   for j=1:c
-      if A(i,j)~=0 & ~gasit
-         k=k+1;
-         y(k,1)=i; y(k,2)=j;
-         gasit=1;
-      end
-   end
-end`)}${ml(`>> A=[0 0 1;0 1 0;0 0 1;1 1 2;0 2 1;0 0 0;0 0 2];
->> y=indlinie(A)`)}<p>Rezultat: [1 3; 2 2; 3 3; 4 1; 5 2; 7 3]. Varianta vectorizată (indliniv) trebuie gândită altfel, pentru că MATLAB memorează matricile pe coloane.</p>`, starter: "function y=indlinie(A)\n[r,c]=size(A);\ny=[]; k=0;\nfor i=1:r\n   gasit=0;\n   for j=1:c\n      if A(i,j)~=0 & ~gasit\n         k=k+1;\n         y(k,1)=i; y(k,2)=j;\n         gasit=1;\n      end\n   end\nend" },
-    { title: 'Funcția vectz', statement: `<p>vectz are ca intrare un vector x și ca ieșire un vector y de aceeași lungime, cu elementele nenule identice cu ale lui x, iar în locul zerourilor ultimul element nenul anterior. Pentru x = [1 3 0 0 0 4 5 0 0 6 0 7], y = [1 3 3 3 3 4 5 5 5 6 6 7]. Primul element este nenul.</p>`, hint: '<p>Cu for: o variabilă care memorează ultimul element nenul, inițializată cu x(1). Vectorizat: construiește vectorul diferențelor elementelor nenule consecutive (cu find și diff) și aplică cumsum.</p>', solution: `${mls(`function y=vectz(x)
-% vectz completeaza zerourile cu ultimul element nenul anterior
-y=x; ultim=x(1);
-for i=1:length(x)
-   if x(i)==0
-      y(i)=ultim;
-   else
-      ultim=x(i);
-   end
-end
-
-function y=vectzo(x)
-% vectzo varianta vectorizata cu find, diff si cumsum
-p=find(x);
-d=zeros(size(x));
-d(p)=[x(p(1)) diff(x(p))];
-y=cumsum(d);`)}${ml(`>> x=[1 3 0 0 0 4 5 0 0 6 0 7];
+    for j=1:c
+        if A(i,j)>5
+            A(i,j)=A(i,j)+5;
+        else
+            A(i,j)=-A(i,j);
+        end
+    end
+end`)}<p>Scriptul cu indexare fararor:</p>${mls(`q=A>5;
+A(q)=A(q)+5;
+A(~q)=-A(~q);`)}<p>Comparația pe un exemplu (prelucrarea 1 este deci a(i,j)=a(i,j)+5):</p>${ml(`>> A=[1 7 3;9 5 6];
+>> [r,c]=size(A);
+>> for i=1:r
+..     for j=1:c
+..         if A(i,j)>5
+..             A(i,j)=A(i,j)+5;
+..         else
+..             A(i,j)=-A(i,j);
+..         end
+..     end
+.. end
+>> A
+>> A=[1 7 3;9 5 6];
+>> q=A>5;
+>> A(q)=A(q)+5;
+>> A(~q)=-A(~q)`)}` },
+    { title: 'Funcția indlinie', statement: `<p>Să se scrie o funcție indlinie care are ca parametru de intrare o matrice Iar ca parametru de ieșire o matrice cu același număr de linii și cu două coloane ce va conține indicii primului element nenul al fiecărei linii din matricea inițială. Matricea de ieșire va avea mai puține linii dacă în matricea de intrare există linii numai cu 0. Încercați să determinați și o formă vectorizată a funcției.</p>`, hint: '<p>Prelucrarea obișnuită a elementelor unei matrici cu două bucle for și un if ca la Ex. 4 anterior se complică prin faptul că apare o condiție în plus (aceasta este prelucrarea doar a primului element din linie). Cum MATLAB memorează matricile pe coloană vectorizarea acestei probleme trebuie altfel gândită (dacă este posibil)..Pentru prelucrarea cu for-if este necesar un semnal care să ne spună că pentru linia în execuție am găsit deja primul element. Pentru matricea y de ieșire este necesar un indice de lucru special ce trebuie incrementat cu 1 la fiecare memorare de indici.</p>', solution: `<p>Funcția indlinie nevectorizată este:</p>${mls(`function y=indlinie(x)
+% determinam dimensiunile lui x
+[r,c]=size(x);
+% indicele de memorare al solutiei y este initializat
+k=0;
+% definim vectorul de atentionare. 1=nu s-a determinat vre-un element
+% pozitiv 0= s-a gasit deja primul element pozitiv
+steag=ones(r,1);
+for i=1:r
+    for j=1:c
+% conditia este element pozitiv si nu exista altul anterior pe linie
+        if (x(i,j)~=0)&(steag(i)==1)
+            steag(i)=0; % se anunta primul element s-a gasit
+            k=k+1; % se pozitioneaza indicele pentru memorare
+            y(k,1)=i; % se memoreaza linia
+            y(k,2)=j; % se memoreaza coloana
+        end
+    end
+end`)}<p>Iar funcția vectorizată indliniv este:</p>${mls(`function y=indliniv(x)
+% determinam indici la toate elementele nenule din matrice in r linia
+%  iar in c coloana
+[r,c]=find(x);
+% sortam cu functia sortrows dupa linii ca sa apara indicii in ordinea
+% liniilor
+linsort=sortrows([r,c]);
+% daca diferenta dintre indicii consecutivi de linii este 0 elementele se
+% afla pe aceiasi linie si-l semnalam corect doar pe primul
+indx=[true;diff(linsort(:,1))~=0];
+% alegem din linsort acele elemente pentru care conditia anteruioara a pus
+% 1(true) deoarece acestea sunt primele pe liniile lor
+y=linsort(indx,:);`)}<p>Punerea în execuție:</p>${ml(`%% function y=indlinie(x)
+%% [r,c]=size(x);
+%% k=0;
+%% steag=ones(r,1);
+%% for i=1:r
+%%     for j=1:c
+%%         if (x(i,j)~=0)&(steag(i)==1)
+%%             steag(i)=0;
+%%             k=k+1;
+%%             y(k,1)=i;
+%%             y(k,2)=j;
+%%         end
+%%     end
+%% end
+%% end
+>> A=[ 0 0 1 ;0 1 0 ;0 0 1 ;1 1 2 ;0 2 1 ; 0 0 0 ;0 0 2 ];
+A =
+     0     0     1
+     0     1     0
+     0     0     1
+     1     1     2
+     0     2     1
+     0     0     0
+     0     0     2
+>> y=indlinie(A)
+y =
+     1     3
+     2     2
+     3     3
+     4     1
+     5     2
+     7     3`)}${mls(`>> y=indliniv(A)
+y =
+     1     3
+     2     2
+     3     3
+     4     1
+     5     2
+     7     3`)}<p>Pe fiecare linie a lui y prima valoare este linia , iar a doua valoare este coloana elementelor căutate</p><p>(În îndrumar, linia a 4-a din indlinie apare fără ${c('%')} în față; este un comentariu. Funcția ${c('sortrows')} folosită de indliniv nu este disponibilă în consola acestui site, de aceea ultimul apel este afișat static.)</p>`, starter: "function y=indlinie(x)\n[r,c]=size(x);\nk=0;\nsteag=ones(r,1);\nfor i=1:r\n    for j=1:c\n        if (x(i,j)~=0)&(steag(i)==1)\n            steag(i)=0;\n            k=k+1;\n            y(k,1)=i;\n            y(k,2)=j;\n        end\n    end\nend" },
+    { title: 'Funcția vectz', statement: `<p>Să se creeze o funcție vectz care are ca parametru de intrare un vector, x, iar ca parametru de ieșire un vector y de aceiași lungime ca și x, a;e cărui elemente nenule sunt aceleași ca elementele corespunzătoare din x, iar în locul elementelor nule se pune valoarea elementului nenul anterior. Astfel dacă x=[1 3 0 0 0 4 5 0 0 6 0 7] atunci  y=[ 1 3 3 3 3 4 5 5 5 6 6 7]. Se va presupune că x are întotdeauna primul element nenul.</p>`, hint: `<p>Este necesară o variabilă în care să memorăm pe parcursul unei prelucrări cu o buclă for ultimul element nenul. Această variabilă trebuie inițializată cu valoarea primului element din x (presupus nenul).</p>
+<p style="text-indent:2em">Varianta vectorizată se bazează pe următoarele observații. Să presupunem că avem vectorul x=[x1,x2,0,0,x3,0,x4] și putem obține vectorul diferențelor elementelor nenule consecutive</p>
+<p style="padding-left:2em">xdcons=[x1,x2-x1,0,0,x3-x2,0,x4-x3],</p>
+<p>atunci vectorul soluție</p>
+<p style="padding-left:2em">vsol=[x1,x2,x2,x2,x3,x3,x4]</p>
+<p>se obține prin aplicarea funcției cumsum asupra lui xdcons. Funcția cumsum(x) creează un vector ce are pe poziția k suma elementelor lui x de la 1 la k, adică pentru vdcons de mai sus</p>
+<table style="border-collapse:collapse"><tbody>
+<tr><td style="padding:0 2em 0 0">x1</td><td>deci x1</td></tr>
+<tr><td style="padding:0 2em 0 0">x1+(x2-x1)</td><td>deci x2</td></tr>
+<tr><td style="padding:0 2em 0 0">x1+(x2-x1)+0</td><td>deci x2</td></tr>
+<tr><td style="padding:0 2em 0 0">x1+(x2-x1)+0+0</td><td>deci x2</td></tr>
+<tr><td style="padding:0 2em 0 0">x1+(x2-x1)+0+0(x3-x2)</td><td>deci x3</td></tr>
+<tr><td style="padding:0 2em 0 0">x1+(x2-x1)+0+0(x3-x2)+0</td><td>deci x3</td></tr>
+<tr><td style="padding:0 2em 0 0">x1+(x2-x1)+0+0(x3-x2)+0+(x4-x3)</td><td>deci x4.</td></tr>
+</tbody></table>`, solution: `<p>Funcția vectz (cu bucla for cu if) este:</p>${mls(`function y=vectz(x)
+% functiaa pune n locul elementelor nule ultimul elemeny nenul
+%
+% apel y =vectz(x) sau vectz(x)
+%
+% parametrii intrare
+%         x - vectorul de prelucrat
+% parametrii ieire
+%         y - vectorul rezultat
+% variabile locale
+%        elem_anterior - ultimul element nenul
+elem_anterior=x(1);
+y=x;
+for i =2:length(y)
+    if y(i)==0
+        y(i)=elem_anterior;
+    end
+    elem_anterior=y(i);
+end`)}<p>Funcția vectorizată (cu funcțiile fiind, diff și cumsum) este:</p>${mls(`function y=vectzo(x)
+% functia pune in locul elementelor nule ultimul element nenul
+%
+% apel y =vectzo(x) sau vectzo(x)
+%
+% parametrii intrare
+%         x - vectorul de prelucrat
+% parametrii ieire
+%         y - vectorul rezultat
+% variabile locale
+y=x;
+% Se determina indicii elementelor nenule
+valind=find(y);
+% Se calculeaza diferenta dintre doua elemente nenule consecutive. Doua
+% elemente nenule vor fi considerate consecutive chiar daca au elemente
+% nule intre ele
+y(valind(2:end))=diff(y(valind));
+% Cu functia cumsum un element k este suma elementelor de dinaintea lui.
+% Cum in y se afla acum diferentele elementelor nenule si elementele nule
+% prin aplicarea lui cumsum obtinem exact ce ne trebuie pt. ca un element
+% nul nu contribuie cu nimic la suma elementelor anterioare
+y=cumsum(y);`)}<p>Punerea în execuție:</p>${ml(`%% function y=vectz(x)
+%% elem_anterior=x(1);
+%% y=x;
+%% for i =2:length(y)
+%%     if y(i)==0
+%%         y(i)=elem_anterior;
+%%     end
+%%     elem_anterior=y(i);
+%% end
+%% end
+%% function y=vectzo(x)
+%% y=x;
+%% valind=find(y);
+%% y(valind(2:end))=diff(y(valind));
+%% y=cumsum(y);
+%% end
+>> x=[1 3 0 0 0 4 5 0 0 6 0 7] ;
 >> vectz(x)
->> vectzo(x)`)}<p>Ambele dau 1 3 3 3 3 4 5 5 5 6 6 7. Problema arată că uneori vectorizarea este complexă și nu aduce avantaje deosebite.</p>`, starter: "function y=vectz(x)\ny=x; ultim=x(1);\nfor i=1:length(x)\n   if x(i)==0\n      y(i)=ultim;\n   else\n      ultim=x(i);\n   end\nend\n\nfunction y=vectzo(x)\np=find(x);\nd=zeros(size(x));\nd(p)=[x(p(1)) diff(x(p))];\ny=cumsum(d);" },
+ans =
+    1  3  3  3  3  4  5  5  5  6  6  7
+>> vectzo(x)
+ans =
+    1  3  3  3  3  4  5  5  5  6  6  7`)}<p>Această problemă 6 este un exemplu că uneori vectorizarea este complexă și nu aduce avantaje deosebite.</p>`, starter: "function y=vectz(x)\nelem_anterior=x(1);\ny=x;\nfor i =2:length(y)\n    if y(i)==0\n        y(i)=elem_anterior;\n    end\n    elem_anterior=y(i);\nend\n\nfunction y=vectzo(x)\ny=x;\nvalind=find(y);\ny(valind(2:end))=diff(y(valind));\ny=cumsum(y);" },
   ],
 });
