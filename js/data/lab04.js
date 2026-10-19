@@ -122,24 +122,28 @@ LABS.push({
     { type: 'mc', q: 'Cum reprezinți patru funcții y1..y4 pe <b>aceeași</b> figură?', options: [c("plot(x,y1,'r',x,y2,'b',x,y3,'g',x,y4,'m')"), c('plot(x,[y1 y2 y3 y4])'), c('subplot(2,2,1); plot(x,y1) ...'), c('plot(x,y1); plot(x,y2)') + ' fără hold on'], answer: 0, explain: '<code>plot</code> acceptă mai multe triplete x, y, spec. Varianta cu <code>subplot(2,2,k)</code> le pune în ferestre separate pe același ecran.' },
   ],
   exercises: [
-    { title: 'Patru funcții pe [−2, 2]', statement: `<p>Reprezintă y<sub>1</sub> = e<sup>x/2</sup> sin(2x), y<sub>2</sub> = ${frac('x − 2', 'x<sup>2</sup> + 1')}, y<sub>3</sub> = x·sin(x<sup>2</sup> + 1), y<sub>4</sub> = √(x<sup>2</sup> + 1)·arctg(x) pe x ∈ [−2, 2]: a) toate pe aceeași figură; b) fiecare în figura ei, dar toate pe același ecran.</p>`, hint: '<p>Toate operațiile cu x sunt element cu element: ' + c('.* ./ .^') + '. Pentru b) folosește ' + c('subplot(2,2,k)') + '.</p>', solution: `${ml(`>> x=-2:0.1:2; y1=exp(x/2).*sin(2*x); y2=(x-2)./(x.^2+1);
+    { title: 'Patru funcții pe [−2, 2]', statement: `<p>Să se reprezinte graficele funcțiilor următoare:</p><p>y1 = e<sup>x/2</sup>·sin(2·x);&nbsp;&nbsp; y2 = ${frac('x − 3', 'x<sup>2</sup> + 1')};&nbsp;&nbsp; y3 = x·sin(x<sup>2</sup> + 1);&nbsp;&nbsp; y4 = √(x<sup>2</sup> + 1)·arctg(x),</p><p>definite pe intervalul x ∈ [−2, 2]. Reprezentarea se va face:</p><p>a) toate funcțiile pe aceeași figură;<br>b) fiecare funcție în figura ei dar toate pe același ecran.</p>`, hint: '<p>Toate operațiile cu x sunt element cu element: ' + c('.* ./ .^') + '. Pentru b) folosește ' + c('subplot(2,2,k)') + '.</p>', solution: `<p>a)</p>${ml(`>> x=-2:0.1:2; y1=exp(x/2).*sin(2*x); y2=(x-3)./(x.^2+1);
 >> y3=x.*sin(x.^2+1); y4=sqrt(x.^2+1).*atan(x);
->> plot(x,y1,'r',x,y2,'b',x,y3,'g',x,y4,'m')`)}<p>b) ${c("subplot(2,2,1); plot(x,y1,'r'); subplot(2,2,2); plot(x,y2,'b'); subplot(2,2,3); plot(x,y3,'g'); subplot(2,2,4); plot(x,y4,'m')")}</p>`, check: [{ var: 'y1', expected: 'exp((-2:0.1:2)/2).*sin(2*(-2:0.1:2))' }, { var: 'y2', expected: '((-2:0.1:2)-2)./((-2:0.1:2).^2+1)' }, { var: 'y3', expected: '(-2:0.1:2).*sin((-2:0.1:2).^2+1)' }, { var: 'y4', expected: 'sqrt((-2:0.1:2).^2+1).*atan(-2:0.1:2)' }] },
-    { title: 'Suprafețe (în MATLAB)', statement: `<p>a) z = ${frac('sin √(x<sup>2</sup> + y<sup>2</sup>)', '√(x<sup>2</sup> + y<sup>2</sup>)')} pe [−8, 8]², cu mesh, meshc, surf, surfc în figuri diferite pe același ecran; b) z = x·sin(x)·cos(y) pe [−π, π]²; c) liniile de contur ale celor două grafice, cu contour și contourf, patru desene pe aceeași imagine.</p>`, hint: '<p>Adaugă ' + c('eps') + ' sub radical ca să eviți împărțirea cu 0 în origine.</p>', solution: `${mls(`>> x=-8:0.5:8; y=x; [X,Y]=meshgrid(x,y);
->> Z=sin(sqrt(X.^2+Y.^2+eps))./sqrt(X.^2+Y.^2+eps); surf(X,Y,Z)
->> x=-pi:pi/10:pi; y=x; [X,Y]=meshgrid(x,y);
->> Z=X.*sin(X).*cos(Y); surf(X,Y,Z);
->> subplot(2,2,1); contour(X,Y,Z); subplot(2,2,3); contourf(X,Y,Z)`)}` },
-    { title: 'Figuri geometrice (în MATLAB)', statement: `<p>Desenează: a) un cilindru; b) un paralelipiped dreptunghic; c) o piramidă cu baza pătrat; d) un trunchi de piramidă cu baza hexagonală; e) un con; f) un trunchi de con; g) suprafața de rotație generată de y = x·sin(x); h) o sferă; i) un elipsoid centrat în origine cu raze 1, 8, 3.</p>`, solution: `${mls(`>> cylinder
->> cylinder(4,4)
->> x=0:0.2:2; y=x-2; cylinder(y,4)
->> x=0:0.2:2; y=x-3; cylinder(y,6)
->> x=0:0.2:2; y=x-2; cylinder(y,40)
->> x=0:0.2:2; y=x-3; cylinder(y,40)
->> x=-pi/2:pi/10:pi/2; y=x.*sin(x); cylinder(y,40)
->> sphere
->> ellipsoid(0,0,0,1,8,3)`)}` },
-    { title: 'Intersecții de figuri (în MATLAB)', statement: `<p>a) un cilindru și un con; b) un elipsoid cu centrul (0, 0, 0.5) și raze 1.5, 1, 0.75 cu conul generat de y = x/2 − 4 pentru x = 0:0.5:8.</p>`, solution: `${mls(`>> x=0:0.1:2; y=x-2; cylinder(y,50); hold on; cylinder;
->> ellipsoid(0,0,0.5,1.5,1,0.75); hold on; x=0:0.5:8; y=0.5*x-4; cylinder(y,40)`)}` },
+>> plot(x,y1,'r',x,y2,'b',x,y3,'g',x,y4,'m')`)}<p>b)</p>${ml(`>> x=-2:0.1:2; y1=exp(x/2).*sin(2*x); y2=(x-3)./(x.^2+1);
+>> y3=x.*sin(x.^2+1); y4=sqrt(x.^2+1).*atan(x);
+>> subplot(2,2,1); plot(x,y1,'r'); subplot(2,2,2); plot(x,y2,'b');
+>> subplot(2,2,3); plot(x,y3,'g'); subplot(2,2,4); plot(x,y4,'m')`)}<p>(În soluția din îndrumar apare ${c('y2=(x-2)./(x.^2+1)')}, deși enunțul cere x − 3.)</p>`, check: [{ var: 'y1', expected: 'exp((-2:0.1:2)/2).*sin(2*(-2:0.1:2))' }, { var: 'y2', expected: '((-2:0.1:2)-3)./((-2:0.1:2).^2+1)' }, { var: 'y3', expected: '(-2:0.1:2).*sin((-2:0.1:2).^2+1)' }, { var: 'y4', expected: 'sqrt((-2:0.1:2).^2+1).*atan(-2:0.1:2)' }] },
+    { title: 'Suprafețe și linii de contur (în MATLAB)', statement: `<p>a) Să se reprezinte graficul funcției z = ${frac('sin(√(x<sup>2</sup> + y<sup>2</sup>))', '√(x<sup>2</sup> + y<sup>2</sup>)')} pe domeniul x ∈ [−8, 8], y ∈ [−8, 8]. Se vor utiliza toate comenzile de desenare (mesh, meshc, surf, surfc), pe același ecran în figuri diferite. Discutați diferențele.</p><p>b) Să se traseze suprafața definită de z = x·sin(x)·cos(y) pe domeniul dat de x ∈ [−π, π], y ∈ [−π, π] și să se editeze modul de colorare al suprafeței.</p><p>c) Să se traseze liniile de contur ale celor două grafice de mai sus în ambele variante de desenare, cele patru desene fiind reprezentate pe aceeași imagine.</p>`, hint: '<p>Adaugă ' + c('eps') + ' sub radical ca să eviți împărțirea cu 0 în origine.</p>', solution: `<p>a)</p>${mls(`>> x=-8:0.5:8; y=x; [X,Y]=meshgrid(x,y);
+>> Z=sin(sqrt(X.^2+Y.^2+eps))./sqrt(X.^2+Y.^2+eps); surf(X,Y,Z)`)}<p>b)</p>${mls(`>> x=-pi:pi/10:pi; y=x; [X,Y]=meshgrid(x,y);
+>> Z=X.*sin(X).*cos(Y); surf(X,Y,Z);`)}<p>c)</p>${mls(`>> x=-8:0.5:8; y=x; [X,Y]=meshgrid(x,y);
+>> Z=sin(sqrt(X.^2+Y.^2+eps))./sqrt(X.^2+Y.^2+eps); subplot(2,2,1)
+>> contour(X,Y,Z); subplot(2,2,3); contourf(X,Y,Z)
+>> x=-pi:pi/10:pi; y=x; [X,Y]=meshgrid(x,y); Z=X.*sin(X).*cos(Y);
+>> subplot(2,2,2);contour(X,Y,Z); subplot(2,2,4); contourf(X,Y,Z)`)}` },
+    { title: 'Figuri geometrice (în MATLAB)', statement: `<p>Să se deseneze următoarele figuri geometrice:</p><p>a) un cilindru;<br>b) un paralelipiped dreptunghic;<br>c) o piramidă cu baza pătrată;<br>d) un trunchi de piramidă cu baza hexagonală;<br>e) un con;<br>f) un trunchi de con;<br>g) o suprafață de rotație generată de funcția: y = x·sin(x);<br>h) o sferă;<br>i) un elipsoid cu centrul în punctul (0,0,0) și de raze: rx=1, ry=8 și rz=3.</p>`, solution: `${mls(`>> cylinder;   % a)
+>> cylinder(4,4);   % b)
+>> x=0:0.2:2; y=x-2; cylinder(y,4);   % c)
+>> x=0:0.2:2; y=x-3; cylinder(y,6);   % d)
+>> x=0:0.2:2; y=x-2; cylinder(y,40);   % e)
+>> x=0:0.2:2; y=x-3; cylinder(y,40);   % f)
+>> x=-pi/2:pi/10:pi/2; y=x.*sin(x); cylinder(y,40);   % g)
+>> sphere;   % h)
+>> ellipsoid(0,0,0,1,8,3)   % i)`)}` },
+    { title: 'Intersecții de figuri (în MATLAB)', statement: `<p>Să se facă următoarele intersecții de figuri:</p><p>a) un cilindru și un con;<br>b) un elipsoid de centru (0,0,0.5) și raze rx=1.5, ry=1 și rz=0.75 cu conul generat de <span style="white-space:nowrap">y = ${frac('1', '2')}·x − 4;</span> pentru x=0:0.5:8.</p>`, solution: `<p>a)</p>${mls(`>> x=0:0.1:2; y=x-2; cylinder(y,50); hold on; cylinder;`)}<p>b)</p>${mls(`>> ellipsoid(0,0,0.5,1.5,1,0.75); hold on; x=0:0.5:8; y=0.5*x-4; cylinder(y,40)`)}` },
   ],
 });
