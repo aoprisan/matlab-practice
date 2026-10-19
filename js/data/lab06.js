@@ -111,24 +111,49 @@ combine(trig)`)}` },
     { type: 'mc', q: 'Ce dă ' + c('simplify(sin(x)^2+cos(x)^2)') + '?', options: [c('1'), c('sin(x)^2+cos(x)^2'), c('cos(2*x)'), c('2')], answer: 0, explain: 'Identitatea fundamentală a trigonometriei.' },
     { type: 'mc', q: 'Cum calculezi simbolic 2/3 + 4/5 + 1/7?', options: [c('sym(2)/sym(3)+sym(4)/sym(5)+sym(1)/sym(7)'), c('2/3+4/5+1/7'), c("sym('2/3+4/5+1/7')") + ' nu este posibil', c('collect(2/3+4/5+1/7)')], answer: 0, explain: 'Rezultatul exact: 169/105. Varianta numerică dă 1.6095.' },
   ],
-  exercises: [
-    { title: 'Fracții exacte', statement: `<p>Calculează simbolic: a) 2/3 + 4/5 + 1/7; b) (1/2 + 1/3)/(1/5 + 1/7); c) fracția continuă 1 + 1/(1 + 1/(1 + 1/(1 + 1/2))).</p>`, solution: `${mls(`>> sym(2)/sym(3)+sym(4)/sym(5)+sym(1)/sym(7)
->> u=sym(1);d=sym(2);t=sym(3);c=sym(5);s=sym(7);
+  exercises: (() => {
+    /* paranteze mari în jurul fracțiilor, doar pentru enunțurile de mai jos */
+    const P = s => '<span style="display:inline-flex;align-items:center;vertical-align:middle"><span style="font-size:1.9em;font-weight:200;line-height:1">(</span>' + s + '<span style="font-size:1.9em;font-weight:200;line-height:1">)</span></span>';
+    const f1 = d => frac('1', d);
+    return [
+    { title: 'Fracții exacte', statement: `<p>Să se calculeze simbolic expresiile:</p>
+      <p>a) ${frac('2', '3')} + ${frac('4', '5')} + ${frac('1', '7')} =</p>
+      <p>b) ${frac(frac('1', '2') + ' + ' + frac('1', '3'), frac('1', '5') + ' + ' + frac('1', '7'))} =</p>
+      <p>c) 1 + ${f1('1 + ' + f1('1 + ' + f1('1 + ' + frac('1', '2'))))} =</p>`, solution: `${mls(`>> sym(2)/sym(3)+sym(4)/sym(5)+sym(1)/sym(7)
+>> u=sym(1);d=sym(2);t=sym(3);c=sym(5);s=sym(7)
 >> (u/d+u/t)/(u/c+u/s)
 >> u+u/(u+u/(u+u/(u+u/d)))`)}<p>a) 169/105; b) 175/72; c) 13/8.</p>` },
-    { title: 'Dezvoltări, polinoame și factorizări', statement: `<p>a) dezvoltă după puterile lui x: (x−y)(x²+y²)(x⁴−x²y²+y⁴); b) polinomul cu rădăcina triplă 2 și dublă −1; c) descompune în factori ireductibili polinomul de gradul 4 în x cu coeficienți în a, b din manual; d) scrie sin(6x) − cos(6x) în funcție de sin(x) și cos(x); e) descompune în numere prime 354600 și 12345678901234567890; f) factorizează a⁶ − a⁵b + a⁴b² − a²b⁴ + ab⁵ − b⁶.</p>`, solution: `${mls(`>> syms x y a b
+    { title: 'Dezvoltări, polinoame și factorizări', statement: `<p>a) Să se dezvolte după puterile lui x expresia:<br>(x − y)·(x<sup>2</sup> + y<sup>2</sup>)·(x<sup>4</sup> − x<sup>2</sup>·y<sup>2</sup> + y<sup>4</sup>) ;</p>
+      <p>b) Să se determine polinomul care are rădăcina triplă 2 și rădăcina dublă -1;</p>
+      <p>c) Să se descompună în factori ireductibili polinomul:</p>
+      <p style="padding-left:2em">(a<sup>2</sup> + b<sup>2</sup>)·x<sup>4</sup> + (−a<sup>3</sup> − a·b<sup>2</sup> + a<sup>2</sup> + b<sup>2</sup> − a·b)·x<sup>3</sup> +<br>(−a<sup>3</sup> − a·b<sup>2</sup> + a<sup>2</sup>·b − 2·a<sup>2</sup> − 2·b<sup>2</sup> − a·b)·x<sup>2</sup> +<br>+ (2·a<sup>3</sup> + 2·a·b<sup>2</sup> + a<sup>2</sup>·b + 2·a·b)·x − 2·a<sup>2</sup>·b</p>
+      <p>d) Să se reprezinte în funcție de sin(x) și cos(x) expresia : sin(6*x)-cos(6*x)</p>
+      <p>e) Să se descompună în produse de numere prime întregii 354600 și 12345678901234567890.</p>
+      <p>f) Să se descompună în factori ireductibili expresia:<br>a<sup>6</sup> − a<sup>5</sup>·b + a<sup>4</sup>·b<sup>2</sup> − a<sup>2</sup>·b<sup>4</sup> + a·b<sup>5</sup> − b<sup>6</sup></p>`, solution: `${mls(`>> syms x y a b
 >> expand((x-y)*(x^2+y^2)*(x^4-x^2*y^2+y^4))
+>> collect((x-y)*(x^2+y^2)*(x^4-x^2*y^2+y^4))
+>> collect((x-2)^3*(x+1)^2)
 >> expand((x-2)^3*(x+1)^2)
 >> factor((a^2+b^2)*x^4+(-a*b-(a^2+b^2)*a+a^2+b^2)*x^3+(a^2*b-a*b-(a^2+b^2)*a-2*a^2-2*b^2)*x^2+(a^2*b+2*a*b+2*(a^2+b^2)*a)*x-2*a^2*b)
 >> expand(sin(6*x)-cos(6*x))
 >> factor(sym('354600'))
 >> factor(sym('12345678901234567890'))
->> factor(a^6-a^5*b+a^4*b^2-b^4*a^2+b^5*a-b^6)`)}<p>a) x^7+x*y^6-y*x^6-y^7; b) x^5-4*x^4+x^3+10*x^2-4*x-8; c) (x+2)*(x-1)*(x-a)*(x*a^2+x*b^2-a*b); d) 32*sin(x)*cos(x)^5-32*sin(x)*cos(x)^3+6*sin(x)*cos(x)-32*cos(x)^6+48*cos(x)^4-18*cos(x)^2+1; e) (2)^3*(3)^2*(5)^2*(197) și (2)*(3)^2*(5)*(101)*(3803)*(3607)*(27961)*(3541); f) (-b+a)*(b+a)*(b^2+a^2)*(b^2-a*b+a^2).</p>` },
-    { title: 'Expresii raționale cu numden', statement: `<p>Calculează expresiile raționale a), b), c) din manual (cu a; cu x, y; cu a, b), folosind numden și simplify.</p>`, solution: `${mls(`>> [sus,jos]=numden(a/(1-1/a)+(1-1/a)/(1/(1-a))+(1/(1-a))/a); simplify(sus/jos)
->> [sus,jos]=numden(((x^3-y^3)/(x^2+y^2)*(x^2-y^2)/(x^3+y^3)*(1/x^2+1/y^2))/(((x+y)^2-x*y)/((x-y)^2+x*y)*(1/y-1/x))); simplify(sus/jos)
->> [sus,jos]=numden(1/(a+b)^3*(1/a^3+1/b^3)+3/(a+b)^4*(1/a^2+1/b^2)+6/(a+b)^5*(1/a+1/b)); simplify(sus/jos)`)}<p>a) 3; b) (x − y)/(xy); c) 1/(a³b³).</p>` },
-    { title: 'Simplificări cu simple', statement: `<p>Simplifică: a) 8cos⁴x + 8 sin x cos³x − 8cos²x − 4 sin x cos x + 1; b) cos(3·acos(x)); c) a·cos a·cos b − a·sin a·sin b + b·cos a·cos b − b·sin a·sin b.</p>`, solution: `${mls(`>> [r,how]=simple(8*cos(x)^4+8*sin(x)*cos(x)^3-8*cos(x)^2-4*sin(x)*cos(x)+1)
+>> factor(a^6-a^5*b+a^4*b^2-b^4*a^2+b^5*a-b^6)`)}<p>La a) și b) se poate folosi oricare dintre ${c('expand')} și ${c('collect')}.</p><p>a) x^7+x*y^6-y*x^6-y^7<br>b) x^5-4*x^4+x^3+10*x^2-4*x-8<br>c) (x+2)*(x-1)*(x-a)*(x*a^2+x*b^2-a*b)<br>d) 32*sin(x)*cos(x)^5-32*sin(x)*cos(x)^3+6*sin(x)*cos(x)-32*cos(x)^6+48*cos(x)^4-18*cos(x)^2+1<br>e) (2)^3*(3)^2*(5)^2*(197) și (2)*(3)^2*(5)*(101)*(3803)*(3607)*(27961)*(3541)<br>f) (-b+a)*(b+a)*(b^2+a^2)*(b^2-a*b+a^2)</p>` },
+    { title: 'Expresii raționale cu numden', statement: `<p>Să se calculeze expresiile:</p>
+      <p>a) ${frac('a', '1 − ' + f1('a'))} + ${frac('1 − ' + f1('a'), f1('1 − a'))} + ${frac(f1('1 − a'), 'a')} =</p>
+      <p>b) ${frac(frac('x<sup>3</sup> − y<sup>3</sup>', 'x<sup>2</sup> + y<sup>2</sup>') + '·' + frac('x<sup>2</sup> − y<sup>2</sup>', 'x<sup>3</sup> + y<sup>3</sup>') + '·' + P(f1('x<sup>2</sup>') + ' + ' + f1('y<sup>2</sup>')), frac('(x + y)<sup>2</sup> − x·y', '(x − y)<sup>2</sup> + x·y') + '·' + P(f1('y') + ' − ' + f1('x')))} =</p>
+      <p>c) ${f1('(a + b)<sup>3</sup>')}·${P(f1('a<sup>3</sup>') + ' + ' + f1('b<sup>2</sup>'))} + ${frac('3', '(a + b)<sup>4</sup>')}·${P(f1('a<sup>2</sup>') + ' + ' + f1('b<sup>2</sup>'))} + ${frac('6', '(a + b)<sup>5</sup>')}·${P(f1('a') + ' + ' + f1('b'))} =</p>`, solution: `${mls(`>> syms x y a b
+>> [sus,jos]=numden(a/(1-1/a)+(1-1/a)/(1/(1-a))+(1/(1-a))/a)
+>> simplify(sus/jos)
+>> [sus,jos]=numden(((x^3-y^3)/(x^2+y^2)*(x^2-y^2)/(x^3+y^3)*(1/x^2+1/y^2))/(((x+y)^2-x*y)/((x-y)^2+x*y)*(1/y-1/x)))
+>> simplify(sus/jos)
+>> [sus,jos]=numden(1/(a+b)^3*(1/a^3+1/b^3)+3/(a+b)^4*(1/a^2+1/b^2)+6/(a+b)^5*(1/a+1/b))
+>> simplify(sus/jos)`)}<p>a) 3; b) ${frac('x − y', 'x·y')}; c) ${frac('1', 'a<sup>3</sup>·b<sup>3</sup>')}.</p><div class="note">La c) enunțul din manual are ${frac('1', 'b<sup>2</sup>')} în prima paranteză, dar indicația (și rezultatul 1/(a<sup>3</sup>b<sup>3</sup>)) folosesc ${frac('1', 'b<sup>3</sup>')}.</div>` },
+    { title: 'Simplificări cu simple', statement: `<p>Să se simplifice expresiile:</p>
+      <p>a) 8·cos<sup>4</sup>(x) + 8·sin(x)·cos<sup>3</sup>(x) − 8·cos<sup>2</sup>(x) − 4·sin(x)·cos(x) + 1 ;<br>b) cos(3·acos(x));<br>c) a·cos(a)·cos(b) − a·sin(a)·sin(b) + b·cos(a)·cos(b) − b·sin(a)·sin(b) .</p>`, solution: `${mls(`>> syms x a b
+>> [r,how]=simple(8*cos(x)^4+8*sin(x)*cos(x)^3-8*cos(x)^2-4*sin(x)*cos(x)+1)
 >> [r,how]=simple(cos(3*acos(x)))
->> simple(simple(a*cos(a)*cos(b)-a*sin(a)*sin(b)+b*cos(a)*cos(b)-b*sin(a)*sin(b)))`)}<p>a) r = cos(4*x)+sin(4*x), how = combine; b) r = 4*x^3-3*x, how = expand; c) cos(a+b)*(a+b).</p>` },
-  ],
+>> simple(simple(a*cos(a)*cos(b)-a*sin(a)*sin(b)+b*cos(a)*cos(b)-b*sin(a)*sin(b)))`)}<p>a) r = cos(4*x)+sin(4*x); how = combine<br>b) r = 4*x^3-3*x; how = expand<br>c) cos(a+b)*(a+b)</p>` },
+    ];
+  })(),
 });

@@ -110,33 +110,37 @@ LABS.push({
     { type: 'mc', q: 'Cum se numesc argumentele lui ' + c('dblquad(f,0,1,-2,2)') + '?', options: ['funcția, xmin, xmax, ymin, ymax', 'funcția, ymin, ymax, xmin, xmax', 'funcția, x0, y0, nx, ny', 'funcția, a, b, tol, n'], answer: 0, explain: 'Integrala dublă pe [0,1]×[−2,2].' },
   ],
   exercises: [
-    { title: 'Operații cu polinoame', statement: `<p>P = x<sup>5</sup> − 7x<sup>3</sup> − 8x<sup>2</sup> + 2x + 12, Q = x<sup>4</sup> − 5x<sup>2</sup> + 4, T = x<sup>6</sup> + 4x<sup>4</sup> − x<sup>2</sup> − 4. a) produsul P·T·Q; b) câtul și restul la P:Q și T:Q; c) rădăcinile lui P, Q, T.</p>`, solution: `${ml(`>> p=[1 0 -7 -8 2 12]; q=[1 0 -5 0 4]; t=[1 0 4 0 -1 0 -4];
+    { title: 'Operații cu polinoame', statement: `<p>Fie polinoamele:</p><p>P[x] = x<sup>5</sup> − 7x<sup>3</sup> − 8x<sup>2</sup> + 2x + 12 ;<br>Q[x] = x<sup>4</sup> − 5x<sup>2</sup> + 4 ;<br>T[x] = x<sup>6</sup> + 4x<sup>4</sup> − x<sup>2</sup> − 4</p><p>a) Să se determine produsul P[x]*T[x]*Q[x] ;<br>b) Să se determine câtul și restul împărțirii P[x]:Q[x] și T[x]:Q[x];<br>c) Să se determine rădăcinile polinoamelor P[x], Q[x] și T[x].</p>`, solution: `${ml(`>> p=[1 0 -7 -8 2 12]; q=[1 0 -5 0 4]; t=[1 0 4 0 -1 0 -4];
 >> conv(conv(p,t),q)
 >> [c,r]=deconv(p,q)
 >> [c1,r1]=deconv(t,q)
 >> roots(p)
 >> roots(q)
->> roots(t)`)}<p>b) c = x, r = −2x<sup>3</sup> − 8x<sup>2</sup> − 2x + 12; c1 = x<sup>2</sup> + 9, r1 = 40x<sup>2</sup> − 40. c) P: 3, −2, −1±i, 1; Q: 1, −1, 2, −2; T: ±2i, 1, −1, ±i.</p>`, check: [{ var: 'p', expected: '[1 0 -7 -8 2 12]' }, { var: 'q', expected: '[1 0 -5 0 4]' }, { var: 't', expected: '[1 0 4 0 -1 0 -4]' }] },
-    { title: 'Polinom cu rădăcini date', statement: `<p>a) S[x] cu rădăcinile 1, −2, 3, −4, 5; b) S(2), S(0), S(−7); c) S′(1), S′(0), S′(−1).</p>`, solution: `${ml(`>> v=[1 -2 3 -4 5]; s=poly(v)
+>> roots(t)`)}<p>a) x<sup>15</sup> − 8x<sup>13</sup> − 8x<sup>12</sup> − 8x<sup>11</sup> + 20x<sup>10</sup> + 134x<sup>9</sup> + 124x<sup>8</sup> − 137x<sup>7</sup> − 340x<sup>6</sup> − 94x<sup>5</sup> + 76x<sup>4</sup> + 144x<sup>3</sup> + 320x<sup>2</sup> − 32x − 192.</p><p>b) c = x; r = −2x<sup>3</sup> − 8x<sup>2</sup> − 2x + 12; c1 = x<sup>2</sup> + 9; r1 = 40x<sup>2</sup> − 40.</p><p>c) roots(p): x<sub>1</sub> = 3, x<sub>2</sub> = −2, x<sub>3</sub> = −1+i, x<sub>4</sub> = −1−i, x<sub>5</sub> = 1; roots(q): x<sub>1</sub> = 1, x<sub>2</sub> = −1, x<sub>3</sub> = 2, x<sub>4</sub> = −2; roots(t): x<sub>1</sub> = 2i, x<sub>2</sub> = −2i, x<sub>3</sub> = 1, x<sub>4</sub> = −1, x<sub>5</sub> = i, x<sub>6</sub> = −i.</p>`, check: [{ var: 'p', expected: '[1 0 -7 -8 2 12]' }, { var: 'q', expected: '[1 0 -5 0 4]' }, { var: 't', expected: '[1 0 4 0 -1 0 -4]' }] },
+    { title: 'Polinom cu rădăcini date', statement: `<p>a) Să se determine polinomul S[x] ale cărui rădăcini sunt:<br>x<sub>1</sub>=1, x<sub>2</sub>=-2, x<sub>3</sub>=3, x<sub>4</sub>=-4, x<sub>5</sub>=5;<br>b) Să se afle valorile S(2), S(0) și S(-7);<br>c) Să se afle valorile S’(1), S’(0) și S’(-1).</p>`, solution: `<p>Soluția din manual:</p>${ml(`>> v=[1 2 3 -4 -5]; s=poly(v)
 >> polyval(s,2), polyval(s,0), polyval(s,-7)
->> polyval(polyder(s),1), polyval(polyder(s),0), polyval(polyder(s),-1)`)}<p>S = x<sup>5</sup> − 3x<sup>4</sup> − 23x<sup>3</sup> + 27x<sup>2</sup> + 166x − 120 (manualul folosește rădăcinile 1, 2, 3, −4, −5, care dau x<sup>5</sup> + 3x<sup>4</sup> − 23x<sup>3</sup> − 27x<sup>2</sup> + 166x − 120 cu S(2) = 0, S(0) = −120, S(−7) = −4320, S′(1) = 60, S′(0) = 166, S′(−1) = 144).</p>`, check: [{ var: 's', expected: 'poly([1 -2 3 -4 5])' }] },
-    { title: 'Aproximare și interpolare pentru sin', statement: `<p>x = 0:π/10:π, y = sin(x). a) polinomul P<sub>4</sub> de gradul 4 care aproximează datele; b) compară P<sub>4</sub>(π/2) cu sin(π/2); c) calculează valoarea în π/2 cu toate tipurile de interpolare.</p>`, solution: `${ml(`>> x=0:pi/10:pi; y=sin(x);
+>> polyval(polyder(s),1), polyval(polyder(s),0), polyval(polyder(s),-1)`)}<p>a) s(x) = x<sup>5</sup> + 3x<sup>4</sup> − 23x<sup>3</sup> − 27x<sup>2</sup> + 166x − 120; b) polyval(s,2) = 0, polyval(s,0) = −120, polyval(s,−7) = −4320; c) polyval(polyder(s),1) = 60, polyval(polyder(s),0) = 166, polyval(polyder(s),−1) = 144.</p><div class="note">Manualul folosește în soluție rădăcinile 1, 2, 3, −4, −5, diferite de cele din enunț. Cu rădăcinile din enunț (1, −2, 3, −4, 5):</div>${ml(`>> v=[1 -2 3 -4 5]; s=poly(v)
+>> polyval(s,2), polyval(s,0), polyval(s,-7)
+>> polyval(polyder(s),1), polyval(polyder(s),0), polyval(polyder(s),-1)`)}<p>S = x<sup>5</sup> − 3x<sup>4</sup> − 23x<sup>3</sup> + 27x<sup>2</sup> + 166x − 120.</p>`, check: [{ var: 's', expected: 'poly([1 -2 3 -4 5])' }] },
+    { title: 'Aproximare și interpolare pentru sin', statement: `<p>Fie x = 0 : π/10 : π și y=sin(x).</p><p>a) Să se determine polinomul P<sub>4</sub>[x] de gradul 4 care aproximează datele din vectorii x și y.<br>b) Să se compare valorile P<sub>4</sub>[π/2] cu valoarea exactă sin(π/2);<br>c) Să se calculeze utilând toate tipurile de interpolare valoarea în π/2.</p>`, solution: `${ml(`>> x=0:pi/10:pi; y=sin(x);
 >> p4=polyfit(x,y,4)
 >> polyval(p4,pi/2)-sin(pi/2)
 >> interp1(x,y,pi/2,'nearest')
 >> interp1(x,y,pi/2,'linear')
->> interp1(x,y,pi/2,'spline')`)}<p>P<sub>4</sub> ≈ 0.0368x<sup>4</sup> − 0.2309x<sup>3</sup> + 0.0485x<sup>2</sup> + 0.9874x + 0.0002; eroarea în π/2 este 5.4·10<sup>−4</sup> &lt; 10<sup>−3</sup>. Toate interpolările dau 1 (π/2 este chiar un nod).</p>` },
-    { title: 'Grafice, extreme și integrale', statement: `<p>a) graficele lui f(x) = x·sin(x) și g(x) = ln(1 + sin x) pe [−π, π] cu fplot; b) minimul lui f(x) = ${frac('x<sup>4</sup> − 5x<sup>2</sup> + 4', 'x<sup>6</sup> + 4')} pe [−3, 0]; c) maximul aceleiași funcții pe [−1, 1]; d) ∫<sub>−1</sub><sup>1</sup> x·sin(x) dx și ∫<sub>−π/3</sub><sup>π/3</sup> sin(x)·ln(1 + sin x) dx; e) ∬ x<sup>2</sup>/(y<sup>2</sup>+1) dx dy pe [0,1]²; f) ∭ 1/√(x+y+z+1) pe [0,1]³.</p>`, solution: `${ml(`>> fplot(inline('x.*sin(x)'),[-pi pi],'r')
+>> interp1(x,y,pi/2,'spline')
+>> interp1(x,y,pi/2,'cubic')`)}<p>a) P<sub>4</sub>(x) = 0.0368x<sup>4</sup> − 0.2309x<sup>3</sup> + 0.0485x<sup>2</sup> + 0.9874x + 0.0002; b) polyval(p4,pi/2) − sin(pi/2) = 0.00053993 &lt; 10<sup>−3</sup>; c) toate cele patru interpolări dau 1.</p>` },
+    { title: 'Grafice, extreme și integrale', statement: `<p>a) Să se reprezinte graficele funcțiilor f(x)=x*sin(x) și g=ln(1+sin(x)) pe [−π, π] utilizând funcția fplot.<br>b) Să se determine minimumul funcției f(x) = ${frac('x<sup>4</sup> − 5·x<sup>2</sup> + 4', 'x<sup>6</sup> + 4')} pe intervalul [-3, 0];<br>c) Să se determine maximumul aceleiași funcții pe intervalul [-1, 1];<br>d) Să se calculeze ∫<sub>−1</sub><sup>1</sup> f(x) dx și ∫<sub>−π/3</sub><sup>π/3</sup> sin(x)*g(x) dx ;<br>e) Să se calculeze ∬ ${frac('x<sup>2</sup>', 'y<sup>2</sup> + 1')} dxdy pentru xmin=0, xmax=1, ymin=0, ymax=1;<br>f) Să se calculeze ∭ ${frac('dxdydz', '√<span style="text-decoration:overline">x + y + z + 1</span>')} pentru xmin=ymin=zmin=0, xmax=ymax=zmax=1.</p>`, solution: `${ml(`>> fplot(inline('x.*sin(x)'),[-pi pi],'r')
+>> fplot(inline('log(1+sin(x))'),[-pi pi],'m')
 >> fminbnd(inline('(x.^4-5*x.^2+4)./(x.^6+4)'),-3,0)
 >> fminbnd(inline('-(x.^4-5*x.^2+4)./(x.^6+4)'),-1,1)
 >> quad(inline('x.*sin(x)'),-1,1)
 >> quad(inline('sin(x).*log(1+sin(x))'),-1,1)
 >> dblquad(inline('x.^2./(y.^2+1)'),0,1,0,1)
->> triplequad(inline('1./sqrt(x+y+z+1)'),0,1,0,1,0,1)`)}<p>b) −1.3072; c) 0; d) 0.6023 și 0.6750 (manualul integrează pe [−1, 1]); e) 0.2618; f) 0.6428.</p>` },
-    { title: 'Ecuații cu fzero', statement: `<p>a) x·sin(x) + cos(x) = 0, x<sub>0</sub> = 1; b) x<sup>2</sup>√(x<sup>2</sup>+3) + x·ln(x<sup>2</sup>+1) − 2 − ln 2 = 0, x<sub>0</sub> = 0.5; c) desenează f(x) = (x−1)e<sup>x</sup> sin(x) + x<sup>3</sup> − x și determină toate rădăcinile pe [−2, 2].</p>`, hint: '<p>La c) citește pe grafic aproximativ unde f taie axa Ox (în jur de −1, 0.1 și 0.9) și folosește aceste valori ca x<sub>0</sub>.</p>', solution: `${ml(`>> fzero(inline('x.*sin(x)+cos(x)'),1)
+>> triplequad(inline('1./sqrt(x+y+z+1)'),0,1,0,1,0,1)`)}<p>b) −1.3072; c) 0; d) 0.6023 și 0.6750; e) 0.2618; f) 0.6428.</p><div class="note">La d) manualul integrează f(x) = x*sin(x) din a), iar a doua integrală o calculează tot pe [−1, 1], nu pe [−π/3, π/3] ca în enunț: ${c("quad(inline('sin(x).*log(1+sin(x))'),-pi/3,pi/3)")}.</div>` },
+    { title: 'Ecuații cu fzero', statement: `<p>Să se rezolve ecuațiile:</p><p>a) x·sin(x) + cos(x) = 0 pentru valoarea inițială x=1;<br>b) x<sup>2</sup>·√<span style="text-decoration:overline">x<sup>2</sup> + 3</span> + x·ln(x<sup>2</sup> + 1) − 2 − ln 2 = 0 , x=0.5;<br>c) Să se reprezinte grafic funcția f(x) = (x − 1)·e<sup>x</sup>·sin(x) + x<sup>3</sup> − x și apoi să se determine toate rădăcinile pe intervalul [-2, 2].</p>`, hint: '<p>La c) citește pe grafic aproximativ unde f taie axa Ox (în jur de −1, 0.1 și 0.9) și folosește aceste valori ca puncte inițiale pentru fzero.</p>', solution: `${ml(`>> fzero(inline('x.*sin(x)+cos(x)'),1)
 >> fzero(inline('x.^2.*sqrt(x.^2+3)+x.*log(x.^2+1)-2-log(2)'),0.5)
 >> f=inline('(x-1).*exp(x).*sin(x)+x.^3-x');
 >> fplot(f,[-2 2])
->> fzero(f,-1), fzero(f,0.1), fzero(f,0.9)`)}<p>a) 2.7984; b) 1; c) −1.2255, 0, 1.</p>` },
+>> fzero(f,-1), fzero(f,0.1), fzero(f,0.9)`)}<p>a) 2.7984; b) 1; c) −1.2255, 0, 1. Se observă pe grafic faptul că avem rădăcini în apropierea punctelor −1, 0.1 și 0.9, pe care le-am utilizat apoi în funcția fzero.</p>` },
   ],
 });
